@@ -33,3 +33,11 @@ body {
     text-wrap: balance;
   }
 }
+
+.transformSideNavbar {
+  transition: transform .5s ease-in-out;
+}
+
+.sideNavbar {
+  transform: translateX(0);
+}
