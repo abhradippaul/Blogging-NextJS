@@ -1,3 +1,4 @@
+import CustomFollowButton from "@/components/CustomFollowButton";
 import { blog } from "@/data";
 import Link from "next/link";
 
@@ -15,16 +16,13 @@ function page() {
                   alt="Owner Image"
                 />
                 <div>
-                  <Link href={`/user/${blog.data.owner.userName}`} className="font-semibold text-lg sm:text-xl">
+                  <Link href={`/user/${blog.data.owner.userName}`} className="font-semibold text-lg sm:text-xl text-gray-700 hover:text-black">
                     Abhradip Paul
                   </Link>
                   <h6>4 Followers</h6>
                 </div>
               </div>
-              <button className="flex items-center justify-center bg-green-400 text-white px-4 py-2 text-lg sm:text-xl rounded-md hover:bg-green-500">
-                <h1 className="mx-2">Follow</h1>
-                <i className="fa-solid fa-plus mx-2"></i>
-              </button>
+              <CustomFollowButton />
             </div>
             {/* <h1>{Date.now()}</h1> */}
             <img

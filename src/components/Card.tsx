@@ -8,8 +8,11 @@ function Card() {
     setDate(new Date());
   }, []);
   return (
-    <Link href="/blog/blog1" className="h-[400px] w-[250px] rounded-md bg-white flex items-center justify-around flex-col px-4 py-2 sm:h-[500px] sm:w-[300px]">
-      <h1 className="text-sm sm:text-base">{date?.toDateString()}</h1>
+    <Link
+      href="/blog/blog1"
+      className="h-[400px] w-[250px] rounded-md bg-white flex items-center justify-around flex-col px-4 py-2 sm:h-[500px] sm:w-[300px]"
+    >
+      {/* <h1 className="text-sm sm:text-base">{date?.toDateString()}</h1> */}
       <div className="w-full flex items-center justify-between mb-2">
         <div className="flex items-center justify-center">
           <img
@@ -17,7 +20,9 @@ function Card() {
             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXXfiLPPHdy_97C8D3orOwzk1iVHHt3wJPLg&s"
             alt="icon"
           />
-          <h1 className="text-sm sm:text-base">Abhradip Paul</h1>
+          <Link href="/user/user1" className="text-sm font-semibold sm:text-base text-gray-700 hover:text-black">
+            Abhradip Paul
+          </Link>
         </div>
         <h1 className="text-sm sm:text-base">3 follower</h1>
       </div>
@@ -28,7 +33,9 @@ function Card() {
       />
       <h1 className="text-lg sm:text-xl">Title</h1>
       <p className="text-sm sm:text-base">
-        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facilis accusamus voluptates quis vero cum quos sunt ullam blanditiis assumenda asperiores?
+        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facilis
+        accusamus voluptates quis vero cum quos sunt ullam blanditiis assumenda
+        asperiores?
       </p>
       <div className="w-full flex">
         <div className="w-1/2 border flex items-center justify-center">
