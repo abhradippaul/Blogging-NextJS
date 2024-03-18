@@ -1,14 +1,13 @@
-"use client"
+"use client";
 import Card from "@/components/Card";
 import CustomFollowButton from "@/components/CustomFollowButton";
 import { useEffect, useState } from "react";
 
 function page() {
-  
-  const [loading,setLoading] = useState<boolean>(true)
+  const [loading, setLoading] = useState<boolean>(true);
   useEffect(() => {
-    setLoading(false)
-  },[])
+    setLoading(false);
+  }, []);
   return (
     <div className="bg-slate-200 py-4 min-h-dvh px-2">
       <div className="max-w-7xl rounded-md shadow-lg mx-auto overflow-hidden">
@@ -24,8 +23,12 @@ function page() {
             alt="Channel Image"
           />
           <div className="mx-4">
-            <h2 className="text-3xl my-4 font-semibold text-gray-800 sm:text-4xl">Abhradip Paul</h2>
-            <p className="my-2 text-lg sm:text-xl">@abhradippaul . 0 follower . 0 blogs</p>
+            <h2 className="text-3xl my-4 font-semibold text-gray-800 sm:text-4xl">
+              Abhradip Paul
+            </h2>
+            <p className="my-2 text-lg sm:text-xl">
+              @abhradippaul . 0 follower . 0 blogs
+            </p>
             <p className="my-2">
               Lorem ipsum dolor sit amet consectetur, adipisicing elit. Mollitia
               nisi fuga cum doloremque omnis totam dolorum distinctio suscipit
@@ -35,8 +38,8 @@ function page() {
           </div>
         </div>
         <hr />
-        <div className="my-4">
-          {loading && <Card suppressHydrationWarning={true} />}
+        <div suppressHydrationWarning={true} className="my-4">
+          {!loading && <Card />}
         </div>
       </div>
     </div>
