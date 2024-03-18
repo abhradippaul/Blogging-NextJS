@@ -6,7 +6,9 @@ function Navbar() {
   const hamburgerClick = () => {
     const bgBlackElement = document.querySelector<Element>("#bg-black");
     const sideNavbar = document.querySelector<Element>("#side-navbar");
-    if (bgBlackElement && sideNavbar) {
+    const body = document.querySelector<Element>("body");
+    if (bgBlackElement && sideNavbar && body) {
+      body.classList.toggle("overflow-y-hidden")
       bgBlackElement.classList.toggle("hidden");
       sideNavbar.classList.toggle("sideNavbar");
     }
@@ -20,12 +22,12 @@ function Navbar() {
       ></i>
       <div
         id="bg-black"
-        className="opacity-30 bg-black absolute top-0 right-0 left-0 bottom-0 hidden"
+        className="opacity-30 bg-black fixed top-0 right-0 left-0 bottom-0 hidden"
         onClick={hamburgerClick}
       ></div>
       <div
         id="side-navbar"
-        className="absolute top-0 bottom-0 left-0 right-[50%] bg-slate-100 translate-x-[-100%] transformSideNavbar sm:right-[70%]"
+        className="fixed top-0 bottom-0 left-0 right-[50%] bg-slate-100 translate-x-[-100%] transformSideNavbar sm:right-[70%]"
       >
         <div className="h-16"></div>
         <ul className="border text-xl p-4">

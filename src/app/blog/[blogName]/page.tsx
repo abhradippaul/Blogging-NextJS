@@ -1,17 +1,19 @@
-"use client"
+"use client";
 import Comment from "@/components/Comment";
 import CustomFollowButton from "@/components/CustomFollowButton";
 import { blog } from "@/data";
 import Link from "next/link";
+import { useState } from "react";
 
 function page() {
+  const [owner, setOwner] = useState<boolean>(true);
 
   const commentBtn = () => {
-    const btn = document.querySelector("#comment-btn")
-    if(btn){
-      btn.classList.toggle("invisible")
+    const btn = document.querySelector("#comment-btn");
+    if (btn) {
+      btn.classList.toggle("invisible");
     }
-  }
+  };
 
   return (
     <div className="bg-slate-200 min-h-[93dvh]">
@@ -38,34 +40,51 @@ function page() {
               <CustomFollowButton />
             </div>
             {/* <h1>{Date.now()}</h1> */}
-            <img
-              className="w-full mb-4"
-              src="https://images.unsplash.com/photo-1709842665072-6404e47a5386?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-              alt="Blog Image"
-            />
-            <h2 className="text-xl font-bold mb-4 sm:text-3xl">
-              {blog.data.title}
-            </h2>
-            <p className="mb-4">
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Corrupti
-              nesciunt nisi dolores nulla, vitae natus adipisci reiciendis culpa
-              numquam sed asperiores mollitia explicabo facilis? Doloribus,
-              doloremque hic exercitationem eligendi reprehenderit ad sed iusto
-              sint ratione explicabo cumque labore ea iure, veniam odit! Ad sit
-              excepturi, velit laudantium deserunt sint fugit alias possimus hic
-              totam officiis vitae provident, dolore libero amet recusandae
-              tempore voluptas aliquam asperiores doloremque! Recusandae
-              voluptates nihil provident cupiditate asperiores temporibus quidem
-              voluptatibus aperiam laborum sunt. Praesentium nesciunt sapiente
-              velit similique dolore molestias vero cupiditate. Officia, fugit
-              quibusdam?
-            </p>
+            <div className="relative group">
+              <div className="w-full relative group">
+              <img
+                className="w-full mb-4"
+                src="https://images.unsplash.com/photo-1709842665072-6404e47a5386?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                alt="Blog Image"
+              />
+              {owner && (
+                <div className="group-hover:flex hidden absolute right-0 bottom-[0] bg-white rounded-full w-12 h-12 items-center justify-center">
+                  <i className="fa-solid fa-camera text-4xl cursor-pointer text-black hover:text-gray-800"></i>
+                </div>
+              )}
+              </div>
+              <h2 className="text-xl font-bold mb-4 sm:text-3xl">
+                {blog.data.title}
+              </h2>
+              <p className="mb-4">
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                Corrupti nesciunt nisi dolores nulla, vitae natus adipisci
+                reiciendis culpa numquam sed asperiores mollitia explicabo
+                facilis? Doloribus, doloremque hic exercitationem eligendi
+                reprehenderit ad sed iusto sint ratione explicabo cumque labore
+                ea iure, veniam odit! Ad sit excepturi, velit laudantium
+                deserunt sint fugit alias possimus hic totam officiis vitae
+                provident, dolore libero amet recusandae tempore voluptas
+                aliquam asperiores doloremque! Recusandae voluptates nihil
+                provident cupiditate asperiores temporibus quidem voluptatibus
+                aperiam laborum sunt. Praesentium nesciunt sapiente velit
+                similique dolore molestias vero cupiditate. Officia, fugit
+                quibusdam?
+              </p>
+              {owner && (
+                <div className="group-hover:flex hidden absolute right-0 bottom-[0] bg-white rounded-full w-8 h-8 items-center justify-center">
+                  <i className="fa-solid fa-pen-to-square text-2xl cursor-pointer text-black hover:text-gray-800"></i>
+                </div>
+              )}
+            </div>
             <div className="flex items-center justify-between cursor-pointer">
               <div className="border py-2 text-xl rounded-md w-1/3 flex items-center justify-center sm:text-2xl hover:bg-slate-50">
                 <i className="fa-regular fa-heart"></i>
               </div>
-              <div className="border py-2 text-xl rounded-md w-1/3 flex items-center justify-center sm:text-2xl hover:bg-slate-50"
-              onClick={commentBtn}>
+              <div
+                className="border py-2 text-xl rounded-md w-1/3 flex items-center justify-center sm:text-2xl hover:bg-slate-50"
+                onClick={commentBtn}
+              >
                 <i className="fa-regular fa-comment"></i>
               </div>
               <div className="border text-xl rounded-md w-1/3 flex items-center justify-center sm:text-2xl py-2 hover:bg-slate-50">
@@ -95,16 +114,22 @@ function page() {
                 onBlur={commentBtn}
               />
               <div id="comment-btn" className="flex justify-end my-2 invisible">
-                <button className="border border-red-500 px-2 py-1 mx-2 rounded-md hover:bg-red-500 hover:text-white"
-                onClick={commentBtn}>Cancel</button>
-                <button className="border border-green-500 px-2 py-1 mx-2 rounded-md hover:bg-green-500 hover:text-white">Comment</button>
+                <button
+                  className="border border-red-500 px-2 py-1 mx-2 rounded-md hover:bg-red-500 hover:text-white"
+                  onClick={commentBtn}
+                >
+                  Cancel
+                </button>
+                <button className="border border-green-500 px-2 py-1 mx-2 rounded-md hover:bg-green-500 hover:text-white">
+                  Comment
+                </button>
               </div>
             </div>
           </div>
         </div>
-          <div className="bg-white p-6">
+        <div className="bg-white p-6">
           <Comment />
-          </div>
+        </div>
       </div>
     </div>
   );

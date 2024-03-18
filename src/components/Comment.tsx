@@ -1,6 +1,18 @@
-import React from "react";
+"use client"
+import React, { useEffect } from "react";
 
 function Comment() {
+  const autoResize = () => {
+    const targetarea = document.querySelector("textarea")
+    if(targetarea) {
+      targetarea.style.height = 'auto'
+      targetarea.style.height = `${targetarea.scrollHeight}px`
+    }
+  }
+  useEffect(() => {
+    autoResize()
+  },[])
+
   return (
     <div className="flex">
       <img
@@ -13,7 +25,7 @@ function Comment() {
             <h1 className="mx-2">@username</h1>
             <h6 className="mx-2">2 years ago</h6>
         </div>
-        <textarea className="m-2 outline-none w-full" rows={4} value="My comment on this postasjk;ddddddddddd;fjjjjjjjjjjjjjjjjjjjjjjLorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus maiores obcaecati praesentium nisi ducimus vitae quod quisquam saepe debitis impedit dignissimos voluptates, dolore accusantium molestias, sunt cupiditate fugit rem dolorem.Lorem ipsum dolor sit amet consectetur adipisicing elit. At fuga corporis quam optio dicta expedita, quo eius nostrum, dolores voluptatem magnam, aspernatur deleniti consectetur quae labore reiciendis asperiores nihil. Corrupti sunt similique exercitationem nesciunt. Expedita ut dicta odit laborum, illo molestias accusamus impedit veniam sed facilis tempora possimus nostrum eligendi voluptatum quas qui. Ea, porro molestiae vel iusto modi quos adipisci, beatae vero obcaecati est temporibus, quidem provident veritatis tempora dolorem explicabo cupiditate illum animi eius. Autem suscipit, id, facere reiciendis doloremque perferendis voluptate accusantium fuga est distinctio cupiditate esse fugiat vero, ex a obcaecati dignissimos odit necessitatibus eius repellendus."/>
+        <textarea className="m-2 outline-none w-full resize-none" value="My comment on this postasjk;ddddddddddd;fjjjjjjjjjjjjjjjjjjjjjjLorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus maiores obcaecati praesentium nisi ducimus vitae quod quisquam saepe debitis impedit dignissimos voluptates, dolore accusantium molestias, sunt cupiditate fugit rem dolorem.Lorem ipsum dolor sit amet consectetur adipisicing elit. At fuga corporis quam optio dicta expedita, quo eius nostrum, dolores voluptatem magnam, aspernatur deleniti consectetur quae labore reiciendis asperiores nihil. Corrupti sunt similique exercitationem nesciunt. Expedita ut dicta odit laborum, illo molestias accusamus impedit veniam sed facilis tempora possimus nostrum eligendi voluptatum quas qui. Ea, porro molestiae vel iusto modi quos adipisci, beatae vero obcaecati est temporibus, quidem provident veritatis tempora dolorem explicabo cupiditate illum animi eius. Autem suscipit, id, facere reiciendis doloremque perferendis voluptate accusantium fuga est distinctio cupiditate esse fugiat vero, ex a obcaecati dignissimos odit necessitatibus eius repellendus." readOnly></textarea>
       </div>
     </div>
   );
