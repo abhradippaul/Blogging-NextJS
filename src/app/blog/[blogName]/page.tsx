@@ -1,19 +1,38 @@
 "use client";
 import Comment from "@/components/Comment";
+import CustomFileUpload from "@/components/CustomFileUpload";
 import CustomFollowButton from "@/components/CustomFollowButton";
 import { blog } from "@/data";
 import Link from "next/link";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 function page() {
   const [owner, setOwner] = useState<boolean>(true);
-
+  const [edit, setEdit] = useState<boolean>(false);
   const commentBtn = () => {
     const btn = document.querySelector("#comment-btn");
     if (btn) {
       btn.classList.toggle("invisible");
     }
   };
+
+  const editBlog = () => {
+    setEdit((prev) => !prev);
+  };
+
+  const textareaResize = useCallback(() => {
+    const targetarea = Array.from(document.querySelectorAll("textarea"));
+    if (targetarea.length) {
+      targetarea.forEach((e) => {
+        e.style.height = "auto";
+        e.style.height = `${e.scrollHeight}px`;
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    textareaResize();
+  }, []);
 
   return (
     <div className="bg-slate-200 min-h-[93dvh]">
@@ -42,22 +61,28 @@ function page() {
             {/* <h1>{Date.now()}</h1> */}
             <div className="relative group">
               <div className="w-full relative group">
-              <img
-                className="w-full mb-4"
-                src="https://images.unsplash.com/photo-1709842665072-6404e47a5386?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                alt="Blog Image"
-              />
-              {owner && (
-                <div className="group-hover:flex hidden absolute right-0 bottom-[0] bg-white rounded-full w-12 h-12 items-center justify-center">
-                  <i className="fa-solid fa-camera text-4xl cursor-pointer text-black hover:text-gray-800"></i>
-                </div>
-              )}
+                <img
+                  className="w-full mb-4"
+                  src="https://images.unsplash.com/photo-1709842665072-6404e47a5386?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                  alt="Blog Image"
+                />
+                {owner && <CustomFileUpload />}
               </div>
-              <h2 className="text-xl font-bold mb-4 sm:text-3xl">
-                {blog.data.title}
-              </h2>
-              <p className="mb-4">
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+              <input
+                id="title-input"
+                value={blog.data.title}
+                readOnly={!edit}
+                className={`w-full py-2 text-xl font-bold my-4 ${
+                  !edit && "border-none"
+                } border-2 rounded-md outline-none sm:text-3xl`}
+              />
+              <textarea
+                id="des-input"
+                readOnly={!edit}
+                className={`mb-4 w-full py-2 resize-none outline-none border-2 rounded-md ${
+                  !edit && "border-none"
+                }`}
+                value="Lorem, ipsum dolor sit amet consectetur adipisicing elit.
                 Corrupti nesciunt nisi dolores nulla, vitae natus adipisci
                 reiciendis culpa numquam sed asperiores mollitia explicabo
                 facilis? Doloribus, doloremque hic exercitationem eligendi
@@ -69,11 +94,31 @@ function page() {
                 provident cupiditate asperiores temporibus quidem voluptatibus
                 aperiam laborum sunt. Praesentium nesciunt sapiente velit
                 similique dolore molestias vero cupiditate. Officia, fugit
-                quibusdam?
-              </p>
-              {owner && (
-                <div className="group-hover:flex hidden absolute right-0 bottom-[0] bg-white rounded-full w-8 h-8 items-center justify-center">
-                  <i className="fa-solid fa-pen-to-square text-2xl cursor-pointer text-black hover:text-gray-800"></i>
+                quibusdam?"
+              />
+
+              {owner && !edit && (
+                <div
+                  className="group-hover:flex hidden absolute right-0 bottom-[0] bg-white rounded-full w-8 h-8 items-center justify-center mx-4 my-2"
+                  onClick={editBlog}
+                >
+                  <i className="fa-solid fa-pen-to-square text-2xl mx-2 cursor-pointer text-black hover:text-gray-800"></i>
+                  <i className="fa-solid fa-trash text-2xl mx-2 cursor-pointer text-black hover:text-gray-800"></i>
+                </div>
+              )}
+              {edit && (
+                <div id="comment-btn" className="flex justify-end my-2">
+                  <button
+                    className="border border-red-500 px-2 py-1 mx-2 rounded-md hover:bg-red-500 hover:text-white"
+                    onClick={() => {
+                      setEdit((prev) => !prev);
+                    }}
+                  >
+                    Cancel
+                  </button>
+                  <button className="border border-green-500 px-2 py-1 mx-2 rounded-md hover:bg-green-500 hover:text-white">
+                    Save
+                  </button>
                 </div>
               )}
             </div>

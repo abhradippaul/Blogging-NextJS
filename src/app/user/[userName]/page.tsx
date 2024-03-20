@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 function page() {
   const [loading, setLoading] = useState<boolean>(true);
   const [owner, setOwner] = useState<boolean>(true);
+  const [edit, setEdit] = useState<boolean>(false);
   useEffect(() => {
     setLoading(false);
   }, []);
@@ -32,10 +33,10 @@ function page() {
               alt="Channel Image"
             />
             {owner && (
-            <div className="group-hover:flex hidden absolute right-0 bottom-[40%] bg-white rounded-full w-8 h-8 items-center justify-center">
-              <i className="fa-solid fa-camera text-2xl cursor-pointer text-black hover:text-gray-800"></i>
-            </div>
-          )}
+              <div className="group-hover:flex hidden absolute right-0 bottom-[40%] bg-white rounded-full w-8 h-8 items-center justify-center">
+                <i className="fa-solid fa-camera text-2xl cursor-pointer text-black hover:text-gray-800"></i>
+              </div>
+            )}
           </div>
           <div className="mx-4 group relative">
             <h2 className="text-3xl my-4 font-semibold text-gray-800 sm:text-4xl">
@@ -50,15 +51,32 @@ function page() {
               modi fugit.
             </p>
             <CustomFollowButton />
-          {owner && (
-            <div className="group-hover:flex hidden absolute right-0 bottom-[0] bg-white rounded-full w-8 h-8 items-center justify-center">
-              <i className="fa-solid fa-pen-to-square text-2xl cursor-pointer text-black hover:text-gray-800"></i>
-            </div>
-          )}
+            {owner && !edit && (
+              <div className="group-hover:flex hidden absolute right-0 bottom-[0] bg-white rounded-full w-8 h-8 items-center justify-center" onClick={() => {
+                setEdit(prev => !prev);
+              }}>
+                <i className="fa-solid fa-pen-to-square text-2xl cursor-pointer text-black hover:text-gray-800"></i>
+              </div>
+            )}
+            {edit && (
+              <div id="comment-btn" className="flex justify-end my-2">
+                <button
+                  className="border border-red-500 px-2 py-1 mx-2 rounded-md hover:bg-red-500 hover:text-white"
+                  onClick={() => {
+                    setEdit((prev) => !prev);
+                  }}
+                >
+                  Cancel
+                </button>
+                <button className="border border-green-500 px-2 py-1 mx-2 rounded-md hover:bg-green-500 hover:text-white">
+                  Save
+                </button>
+              </div>
+            )}
           </div>
         </div>
         <hr />
-        <div suppressHydrationWarning={true} className="my-4">
+        <div className="my-4">
           {!loading && <Card />}
         </div>
       </div>

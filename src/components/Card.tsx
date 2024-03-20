@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-
 function Card() {
   const [date, setDate] = useState<Date>();
   useEffect(() => {
@@ -20,9 +19,9 @@ function Card() {
             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXXfiLPPHdy_97C8D3orOwzk1iVHHt3wJPLg&s"
             alt="icon"
           />
-          <Link href="/user/user1" className="text-sm font-semibold sm:text-base text-gray-700 hover:text-black">
+          <h1 className="text-sm font-semibold sm:text-base text-gray-700 hover:text-black">
             Abhradip Paul
-          </Link>
+          </h1>
         </div>
         <h1 className="text-sm sm:text-base">3 follower</h1>
       </div>
@@ -38,12 +37,12 @@ function Card() {
         asperiores?
       </p>
       <div className="w-full flex">
-        <div className="w-1/2 border flex items-center justify-center">
-          <div className="text-lg max-w-max sm:text-xl">
+        <div className="w-1/2 border flex items-center justify-center hover:bg-slate-100">
+          <div className="text-lg max-w-max sm:text-xl ">
             <i className="fa-regular fa-heart"></i>4
           </div>
         </div>
-        <div className="w-1/2 border flex items-center justify-center">
+        <div className="w-1/2 border flex items-center justify-center hover:bg-slate-100">
           <div className="text-lg max-w-max sm:text-xl">
             <i className="fa-regular fa-comment"></i>2
           </div>
