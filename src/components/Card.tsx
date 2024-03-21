@@ -1,10 +1,14 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-function Card() {
+type PropsValue = {
+  value : object
+}
+function Card({value} : PropsValue) {
   const [date, setDate] = useState<Date>();
   useEffect(() => {
     setDate(new Date());
+    console.log(value)
   }, []);
   return (
     <Link

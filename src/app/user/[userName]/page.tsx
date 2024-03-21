@@ -1,5 +1,6 @@
 "use client";
 import Card from "@/components/Card";
+import CustomEditInput from "@/components/CustomEditInput";
 import CustomFollowButton from "@/components/CustomFollowButton";
 import { useEffect, useState } from "react";
 
@@ -39,9 +40,8 @@ function page() {
             )}
           </div>
           <div className="mx-4 group relative">
-            <h2 className="text-3xl my-4 font-semibold text-gray-800 sm:text-4xl">
-              Abhradip Paul
-            </h2>
+            {/* <input value="Abhradip Paul" className="text-3xl my-4 font-semibold text-gray-800 sm:text-4xl"/> */}
+            <CustomEditInput value="Abhradip Paul" edit={edit} />
             <p className="my-2 text-lg sm:text-xl">
               @abhradippaul . 0 follower . 0 blogs
             </p>
@@ -52,9 +52,12 @@ function page() {
             </p>
             <CustomFollowButton />
             {owner && !edit && (
-              <div className="group-hover:flex hidden absolute right-0 bottom-[0] bg-white rounded-full w-8 h-8 items-center justify-center" onClick={() => {
-                setEdit(prev => !prev);
-              }}>
+              <div
+                className="group-hover:flex hidden absolute right-0 bottom-[0] bg-white rounded-full w-8 h-8 items-center justify-center"
+                onClick={() => {
+                  setEdit((prev) => !prev);
+                }}
+              >
                 <i className="fa-solid fa-pen-to-square text-2xl cursor-pointer text-black hover:text-gray-800"></i>
               </div>
             )}
@@ -76,9 +79,7 @@ function page() {
           </div>
         </div>
         <hr />
-        <div className="my-4">
-          {!loading && <Card />}
-        </div>
+        <div className="my-4">{!loading && <Card />}</div>
       </div>
     </div>
   );

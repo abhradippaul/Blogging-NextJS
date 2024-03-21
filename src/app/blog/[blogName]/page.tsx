@@ -1,5 +1,6 @@
 "use client";
 import Comment from "@/components/Comment";
+import CustomConfirm from "@/components/CustomConfirm";
 import CustomFileUpload from "@/components/CustomFileUpload";
 import CustomFollowButton from "@/components/CustomFollowButton";
 import { blog } from "@/data";
@@ -106,21 +107,7 @@ function page() {
                   <i className="fa-solid fa-trash text-2xl mx-2 cursor-pointer text-black hover:text-gray-800"></i>
                 </div>
               )}
-              {edit && (
-                <div id="comment-btn" className="flex justify-end my-2">
-                  <button
-                    className="border border-red-500 px-2 py-1 mx-2 rounded-md hover:bg-red-500 hover:text-white"
-                    onClick={() => {
-                      setEdit((prev) => !prev);
-                    }}
-                  >
-                    Cancel
-                  </button>
-                  <button className="border border-green-500 px-2 py-1 mx-2 rounded-md hover:bg-green-500 hover:text-white">
-                    Save
-                  </button>
-                </div>
-              )}
+              {edit && <CustomConfirm setEdit={setEdit} edit={edit} />}
             </div>
             <div className="flex items-center justify-between cursor-pointer">
               <div className="border py-2 text-xl rounded-md w-1/3 flex items-center justify-center sm:text-2xl hover:bg-slate-50">

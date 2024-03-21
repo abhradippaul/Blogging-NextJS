@@ -1,0 +1,1 @@
+export const submitButtonClass = "bg-green-500 text-white py-1 rounded-md  mx-auto hover:bg-green-600 text-lg w-1/2 sm:text-xl"
