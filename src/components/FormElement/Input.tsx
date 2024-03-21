@@ -1,36 +1,54 @@
 import React, { useId } from "react";
 
 type PropsValue = {
-  label: string;
-  type: string;
   inputClass: string;
-  labelClass: string;
-  outsideDivClass: string;
+  name: string;
+  data: object;
+  setData: React.Dispatch<React.SetStateAction<object>>;
+  outsideDivClass?: string;
+  labelClass?: string;
+  label?: string | null;
+  type?: string;
+  required?: boolean;
+  readonly?: boolean;
 };
 const Input = React.forwardRef(
   (
     {
-      label,
+      label = null,
       type = "text",
-      inputClass = "",
-      labelClass = "",
+      name,
       outsideDivClass = "",
-      ...props
+      labelClass = "",
+      inputClass = "",
+      required = true,
+      readonly = false,
+      data,
+      setData,
     }: PropsValue,
     ref
   ) => {
     const id = useId();
-    console.log(props)
     return (
-      <div className="flex items-center justify-between my-2">
-        <label htmlFor={id} className="text-base sm:text-lg">
-          {label}
-        </label>
+      <div className={outsideDivClass}>
+        {label && (
+          <label htmlFor={id} className={labelClass}>
+            {label}
+          </label>
+        )}
         <input
           type={type}
           id={id}
-          onChange={(e) => {}}
-          className="border-none outline-none rounded-sm w-[60%] p-1 text-base sm:text-lg"
+          // value={data}
+          onChange={(e) => {
+            setData({
+              ...data,
+              [name]: e.target.value,
+            });
+          }}
+          required={required}
+          readOnly={readonly}
+          className={inputClass}
         />
       </div>
     );

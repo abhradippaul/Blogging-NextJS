@@ -3,6 +3,7 @@ import Comment from "@/components/Comment";
 import CustomConfirm from "@/components/CustomConfirm";
 import CustomFileUpload from "@/components/CustomFileUpload";
 import CustomFollowButton from "@/components/CustomFollowButton";
+import Input from "@/components/FormElement/Input";
 import { blog } from "@/data";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
@@ -10,6 +11,8 @@ import { useCallback, useEffect, useState } from "react";
 function page() {
   const [owner, setOwner] = useState<boolean>(true);
   const [edit, setEdit] = useState<boolean>(false);
+  const [data, setData] = useState<object>({});
+
   const commentBtn = () => {
     const btn = document.querySelector("#comment-btn");
     if (btn) {
@@ -69,14 +72,23 @@ function page() {
                 />
                 {owner && <CustomFileUpload />}
               </div>
-              <input
+              <Input
+                name="title"
+                readonly={!edit}
+                data={data}
+                inputClass={`w-full py-2 text-xl font-bold my-4 ${
+                  !edit && "border-none"
+                } border-2 rounded-md outline-none sm:text-3xl`}
+                setData={setData}
+              />
+              {/* <input
                 id="title-input"
                 value={blog.data.title}
                 readOnly={!edit}
                 className={`w-full py-2 text-xl font-bold my-4 ${
                   !edit && "border-none"
                 } border-2 rounded-md outline-none sm:text-3xl`}
-              />
+              /> */}
               <textarea
                 id="des-input"
                 readOnly={!edit}

@@ -5,7 +5,7 @@ type PropsValue = {
 function SubmitButton({ children, className = "" }: PropsValue) {
   return (
     <button
-      className={`${className}`}
+      className={className}
     >
       {children}
     </button>
