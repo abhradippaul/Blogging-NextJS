@@ -8,6 +8,7 @@ import { blog } from "@/data";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import EditOrDelete from "@/components/FormElement/EditOrDelete";
+import CustomTextarea from "@/components/FormElement/CustomTextarea";
 
 function page() {
   const [owner, setOwner] = useState<boolean>(true);
@@ -39,6 +40,7 @@ function page() {
     textareaResize();
     setData({
       title: blog.data.title,
+      description: blog.data.content,
     });
   }, []);
 
@@ -64,8 +66,11 @@ function page() {
                   <h6>4 Followers</h6>
                 </div>
               </div>
-              {!owner ? <CustomFollowButton  /> : <EditOrDelete /> }
-              
+              {!owner ? (
+                <CustomFollowButton />
+              ) : (
+                <EditOrDelete setEdit={setEdit} />
+              )}
             </div>
             {/* <h1>{Date.now()}</h1> */}
             <div className="relative group">
@@ -86,44 +91,16 @@ function page() {
                 } border-2 rounded-md outline-none sm:text-3xl`}
                 setData={setData}
               />
-              {/* <input
-                id="title-input"
-                value={blog.data.title}
-                readOnly={!edit}
-                className={`w-full py-2 text-xl font-bold my-4 ${
-                  !edit && "border-none"
-                } border-2 rounded-md outline-none sm:text-3xl`}
-              /> */}
-              <textarea
-                id="des-input"
-                readOnly={!edit}
-                className={`mb-4 w-full py-2 resize-none outline-none border-2 rounded-md ${
+              <CustomTextarea
+                edit={edit}
+                name="description"
+                data={data}
+                setData={setData}
+                textareaClass={`mb-4 w-full py-2 resize-none outline-none border-2 rounded-md ${
                   !edit && "border-none"
                 }`}
-                value="Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                Corrupti nesciunt nisi dolores nulla, vitae natus adipisci
-                reiciendis culpa numquam sed asperiores mollitia explicabo
-                facilis? Doloribus, doloremque hic exercitationem eligendi
-                reprehenderit ad sed iusto sint ratione explicabo cumque labore
-                ea iure, veniam odit! Ad sit excepturi, velit laudantium
-                deserunt sint fugit alias possimus hic totam officiis vitae
-                provident, dolore libero amet recusandae tempore voluptas
-                aliquam asperiores doloremque! Recusandae voluptates nihil
-                provident cupiditate asperiores temporibus quidem voluptatibus
-                aperiam laborum sunt. Praesentium nesciunt sapiente velit
-                similique dolore molestias vero cupiditate. Officia, fugit
-                quibusdam?"
               />
 
-              {owner && !edit && (
-                <div
-                  className="group-hover:flex hidden absolute right-0 bottom-[0] bg-white rounded-full w-8 h-8 items-center justify-center mx-4 my-2"
-                  onClick={editBlog}
-                >
-                  <i className="fa-solid fa-pen-to-square text-2xl mx-2 cursor-pointer text-black hover:text-gray-800"></i>
-                  <i className="fa-solid fa-trash text-2xl mx-2 cursor-pointer text-black hover:text-gray-800"></i>
-                </div>
-              )}
               {edit && <CustomConfirm setEdit={setEdit} edit={edit} />}
             </div>
             <div className="flex items-center justify-between cursor-pointer">
