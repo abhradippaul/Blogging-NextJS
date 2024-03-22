@@ -1,12 +1,13 @@
 "use client";
 import Comment from "@/components/Comment";
-import CustomConfirm from "@/components/CustomConfirm";
+import CustomConfirm from "@/components/FormElement/CustomConfirm";
 import CustomFileUpload from "@/components/CustomFileUpload";
-import CustomFollowButton from "@/components/CustomFollowButton";
+import CustomFollowButton from "@/components/FormElement/CustomFollowButton";
 import Input from "@/components/FormElement/Input";
 import { blog } from "@/data";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
+import EditOrDelete from "@/components/FormElement/EditOrDelete";
 
 function page() {
   const [owner, setOwner] = useState<boolean>(true);
@@ -36,6 +37,9 @@ function page() {
 
   useEffect(() => {
     textareaResize();
+    setData({
+      title: blog.data.title,
+    });
   }, []);
 
   return (
@@ -60,7 +64,8 @@ function page() {
                   <h6>4 Followers</h6>
                 </div>
               </div>
-              <CustomFollowButton />
+              {!owner ? <CustomFollowButton  /> : <EditOrDelete /> }
+              
             </div>
             {/* <h1>{Date.now()}</h1> */}
             <div className="relative group">

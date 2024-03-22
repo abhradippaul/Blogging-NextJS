@@ -1,11 +1,11 @@
 import React from "react";
 
-type propsValue = {
+type PropsValue = {
     edit : boolean;
     setEdit : (prev : boolean) => void
 }
 
-function CustomConfirm({setEdit,edit} : propsValue) {
+function CustomConfirm({setEdit,edit} : PropsValue) {
   return (
     <div id="comment-btn" className="flex justify-end my-2">
       <button

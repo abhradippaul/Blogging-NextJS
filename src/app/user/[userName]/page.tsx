@@ -1,7 +1,7 @@
 "use client";
 import Card from "@/components/Card";
 import CustomEditInput from "@/components/CustomEditInput";
-import CustomFollowButton from "@/components/CustomFollowButton";
+import CustomFollowButton from "@/components/FormElement/CustomFollowButton";
 import { useEffect, useState } from "react";
 
 function page() {

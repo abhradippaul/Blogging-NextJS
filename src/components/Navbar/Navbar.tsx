@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import LoggedIn from "./LoggedIn";
 
 function Navbar() {
   // const [navControl, setNavControl] = useState<boolean>(false);
@@ -8,7 +9,7 @@ function Navbar() {
     const sideNavbar = document.querySelector<Element>("#side-navbar");
     const body = document.querySelector<Element>("body");
     if (bgBlackElement && sideNavbar && body) {
-      body.classList.toggle("overflow-y-hidden")
+      body.classList.toggle("overflow-y-hidden");
       bgBlackElement.classList.toggle("hidden");
       sideNavbar.classList.toggle("sideNavbar");
     }
@@ -107,15 +108,7 @@ function Navbar() {
           />
           <i className="fa-solid fa-magnifying-glass text-xl m2-x cursor-pointer bg-slate-200 py-2 px-4 rounded-md sm:text-2xl"></i>
         </div>
-        <Link href="/blog/post"><i className="fa-solid fa-circle-plus text-2xl cursor-pointer"></i></Link>
-        <div>
-          <Link
-            href="/signin"
-            className="border-2 text-xl border-green-500 px-4 py-1  rounded-md hover:bg-green-500 hover:text-white sm:text-2xl"
-          >
-            Sign In
-          </Link>
-        </div>
+        <LoggedIn isLoggedIn={true} />
       </div>
     </nav>
   );

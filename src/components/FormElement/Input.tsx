@@ -1,9 +1,13 @@
 import React, { useId } from "react";
 
+interface Data {
+  [key: string]: any;
+}
+
 type PropsValue = {
   inputClass: string;
   name: string;
-  data: object;
+  data: Data;
   setData: React.Dispatch<React.SetStateAction<object>>;
   outsideDivClass?: string;
   labelClass?: string;
@@ -12,6 +16,7 @@ type PropsValue = {
   required?: boolean;
   readonly?: boolean;
 };
+
 const Input = React.forwardRef(
   (
     {
@@ -29,6 +34,9 @@ const Input = React.forwardRef(
     ref
   ) => {
     const id = useId();
+    const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setData((prev) => ({ ...prev, [name]: e.target.value }));
+    };
     return (
       <div className={outsideDivClass}>
         {label && (
@@ -39,13 +47,8 @@ const Input = React.forwardRef(
         <input
           type={type}
           id={id}
-          // value={data}
-          onChange={(e) => {
-            setData({
-              ...data,
-              [name]: e.target.value,
-            });
-          }}
+          value={data[name]}
+          onChange={handleOnChange}
           required={required}
           readOnly={readonly}
           className={inputClass}
