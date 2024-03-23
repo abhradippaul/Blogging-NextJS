@@ -1,9 +1,11 @@
 "use client";
 import Link from "next/link";
 import LoggedIn from "./LoggedIn";
+import { UseUserContext } from "@/Context/UserContext";
 
 function Navbar() {
   // const [navControl, setNavControl] = useState<boolean>(false);
+  const {status} = UseUserContext()
   const hamburgerClick = () => {
     const bgBlackElement = document.querySelector<Element>("#bg-black");
     const sideNavbar = document.querySelector<Element>("#side-navbar");
@@ -108,7 +110,7 @@ function Navbar() {
           />
           <i className="fa-solid fa-magnifying-glass text-xl m2-x cursor-pointer bg-slate-200 py-2 px-4 rounded-md sm:text-2xl"></i>
         </div>
-        <LoggedIn isLoggedIn={true} />
+        <LoggedIn isLoggedIn={status} />
       </div>
     </nav>
   );

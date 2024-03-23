@@ -1,4 +1,5 @@
 "use client";
+import { UseUserContext } from "@/Context/UserContext";
 import Input from "@/components/FormElement/Input";
 import SubmitButton from "@/components/FormElement/SubmitButton";
 import {
@@ -13,12 +14,15 @@ import { useId, useState } from "react";
 
 function page() {
   const [data, setData] = useState({});
+  const {setUser,setStatus} = UseUserContext()
   return (
     <div className="h-[90vh] w-full flex items-center justify-center bg-slate-200">
       <form
         className="w-[90%] h-[50vh] max-h-[400px] max-w-[500px] bg-slate-100 py-2 px-4 flex flex-col justify-around"
         onSubmit={(e) => {
           e.preventDefault();
+          setUser(data)
+          setStatus(prev => !prev)
           console.log(data);
         }}
       >
