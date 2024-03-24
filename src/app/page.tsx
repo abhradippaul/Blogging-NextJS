@@ -16,27 +16,30 @@ import { useEffect, useState } from "react";
 // }
 
 export default function Home() {
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>();
   const [data, setData] = useState<Array<any>>([]);
   const { user, status } = UseUserContext();
   useEffect(() => {
-    setLoading((prev) => !prev);
+    setLoading(false)
     blogApi("blog")
       .then((e) => {
         setData(e.data);
       })
       .catch((e) => {
         console.log("The error is ", e);
-      });
+      })
+      .finally(() => setLoading((prev) => !prev));
   }, []);
 
   return (
     data && (
       <main className="bg-slate-200 min-h-screen">
         <div className="max-w-7xl mx-auto px-2 py-4 flex flex-wrap gap-3 justify-around">
-          {data.map((e) => (
-            <Card value={e} key={e._id} />
-          ))}
+          {loading ? (
+            <h1>Loading....</h1>
+          ) : (
+            data.map((e) => <Card value={e} key={e._id} />)
+          )}
           {/* <Card value={{test : "test"}} /> */}
         </div>
       </main>

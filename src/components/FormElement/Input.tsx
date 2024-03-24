@@ -1,4 +1,4 @@
-import React, { useId } from "react";
+import React, { createRef, useId, useRef, useState } from "react";
 
 interface Data {
   [key: string]: any;
@@ -8,7 +8,7 @@ type PropsValue = {
   inputClass: string;
   name: string;
   data: Data;
-  setData: React.Dispatch<React.SetStateAction<object>>;
+  setData: React.Dispatch<React.SetStateAction<any>>;
   outsideDivClass?: string;
   labelClass?: string;
   label?: string | null;
@@ -29,14 +29,12 @@ const Input = React.forwardRef(
       required = true,
       readonly = false,
       data,
-      setData,
+      setData
     }: PropsValue,
     ref
   ) => {
     const id = useId();
-    const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setData((prev) => ({ ...prev, [name]: e.target.value }));
-    };
+    const [info, setInfo] = useState<string>();
     return (
       <div className={outsideDivClass}>
         {label && (
@@ -47,8 +45,15 @@ const Input = React.forwardRef(
         <input
           type={type}
           id={id}
-          value={data[name]}
-          onChange={handleOnChange}
+          value={info}
+          onChange={(e) => {
+            setInfo(e.target.value);
+          }}
+          onBlur={() => {
+            if (info) {
+              setData((prev:any) => ({ ...prev, [name]: info }));
+            }
+          }}
           required={required}
           readOnly={readonly}
           className={inputClass}
