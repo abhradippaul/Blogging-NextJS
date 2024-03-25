@@ -39,3 +39,14 @@ export const signInForm = [
     name: "password"
   },
 ];
+
+export const blogUploadForm = [
+  {
+    label: "Title : ",
+    name: "title",
+  },
+  {
+    label: "Slug : ",
+    name: "slug",
+  }
+];

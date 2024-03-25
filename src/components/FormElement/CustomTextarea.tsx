@@ -1,4 +1,4 @@
-import { SetStateAction, useId } from "react";
+import { SetStateAction } from "react";
 
 interface Data {
   [key: string]: any;
@@ -9,7 +9,8 @@ type PropsValue = {
   data: Data;
   textareaClass: string;
   name: string;
-  setData: React.Dispatch<SetStateAction<object>>;
+  setData: React.Dispatch<SetStateAction<any>>;
+  id? : string;
 };
 
 function CustomTextarea({
@@ -18,14 +19,14 @@ function CustomTextarea({
   textareaClass,
   name,
   setData,
+  id
 }: PropsValue) {
-  const id = useId();
   return (
     <div>
       <textarea
         id={id}
         onChange={(e) => {
-          setData((prev) => ({
+          setData((prev:any) => ({
             ...prev,
             [name]: e.target.value,
           }));

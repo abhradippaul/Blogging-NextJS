@@ -18,17 +18,18 @@ import { useEffect, useState } from "react";
 export default function Home() {
   const [loading, setLoading] = useState<boolean>();
   const [data, setData] = useState<Array<any>>([]);
-  const { user, status } = UseUserContext();
+  const { user, status, setStatus } = UseUserContext();
   useEffect(() => {
     setLoading(false)
-    blogApi("blog")
-      .then((e) => {
-        setData(e.data);
-      })
-      .catch((e) => {
-        console.log("The error is ", e);
-      })
-      .finally(() => setLoading((prev) => !prev));
+    setStatus(true)
+    // blogApi("blog")
+    //   .then((e) => {
+    //     setData(e.data);
+    //   })
+    //   .catch((e) => {
+    //     console.log("The error is ", e);
+    //   })
+    //   .finally(() => setLoading((prev) => !prev));
   }, []);
 
   return (

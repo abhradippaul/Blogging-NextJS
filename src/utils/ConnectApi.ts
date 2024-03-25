@@ -46,3 +46,17 @@ export const signInUser = async (userData: any) => {
     return err;
   }
 };
+
+export const uploadBlog = async (blogData:any) => {
+  console.log(blogData)
+  try {
+    const response = await fetch(url + "blog", {
+      method: "POST",
+      body: blogData
+    });
+    const data = await response.json();
+    return data;
+  } catch (err) {
+    return err;
+  }
+}
