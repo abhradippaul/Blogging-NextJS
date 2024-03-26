@@ -49,7 +49,7 @@ export const signInUser = async (userData: any) => {
 };
 
 export const uploadBlog = async (blogData:any, token:string) => {
-  console.log(blogData)
+  // console.log(blogData)
   try {
     const response = await fetch(url + "blog", {
       method: "POST",
@@ -61,6 +61,39 @@ export const uploadBlog = async (blogData:any, token:string) => {
     });
     const data = await response.json();
     return data;
+  } catch (err) {
+    return err;
+  }
+}
+
+export const getUser = async(userName:string,token:string) => {
+  try {
+    const response = await fetch(url + `user\/${userName}`, {
+      method: "GET",
+      credentials: "include",
+      headers : {
+        "authkey" : token
+      }
+    })
+    const data = await response.json();
+    return data
+  } catch (err) {
+    return err;
+  }
+
+}
+
+export const getBlog = async(blogId:string,token:string) => {
+  try {
+    const response = await fetch(url + `blog\/${blogId}`, {
+      method: "GET",
+      credentials: "include",
+      headers : {
+        "authkey" : token
+      }
+    })
+    const data = await response.json();
+    return data
   } catch (err) {
     return err;
   }

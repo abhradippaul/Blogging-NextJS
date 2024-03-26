@@ -6,11 +6,13 @@ import SubmitButton from "@/components/FormElement/SubmitButton";
 import { uploadBlog } from "@/utils/ConnectApi";
 import { blogUploadForm } from "@/utils/FormComponent";
 import { getItemLocalStorage, getItemStringLocalStorage } from "@/utils/LocalStorage";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useId, useState } from "react";
 
 function page() {
   const [loading, setLoading] = useState<boolean>();
   const {setStatus , setUser} = UseUserContext()
+  const router = useRouter()
   const formData = new FormData();
   const [data, setData] = useState({
     title: "",
@@ -34,6 +36,7 @@ function page() {
         })
         .finally(() => {
           setLoading((prev) => !prev);
+          router.push("/")
         });
     }
   };

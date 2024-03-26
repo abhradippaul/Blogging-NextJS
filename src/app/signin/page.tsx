@@ -40,7 +40,6 @@ function page() {
           if (getlLocalStorage && getTokenLocalStorage) {
             setStatus((prev) => !prev);
             setUser(e.user);
-            router.push("/");
           }
         }
       })
@@ -48,6 +47,7 @@ function page() {
         console.log("The error is ", err);
       })
       .finally(() => {
+        router.push("/");
         setLoading((prev) => !prev);
       });
   };

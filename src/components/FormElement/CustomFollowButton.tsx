@@ -1,8 +1,12 @@
 "use client";
 import { useState } from "react";
 
-function CustomFollowButton() {
-  const [value, setValue] = useState<boolean>(false);
+type PropsValue = {
+  isFollowed?: boolean;
+};
+
+function CustomFollowButton({ isFollowed }: PropsValue) {
+  const [value, setValue] = useState<boolean>(isFollowed || false);
 
   return (
     <button

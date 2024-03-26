@@ -1,15 +1,55 @@
 "use client";
+import { UseUserContext } from "@/Context/UserContext";
 import Card from "@/components/Card";
 import CustomEditInput from "@/components/CustomEditInput";
 import CustomFollowButton from "@/components/FormElement/CustomFollowButton";
+import { getUser } from "@/utils/ConnectApi";
+import {
+  getItemLocalStorage,
+  getItemStringLocalStorage,
+} from "@/utils/LocalStorage";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 function page() {
   const [loading, setLoading] = useState<boolean>(true);
   const [owner, setOwner] = useState<boolean>(true);
   const [edit, setEdit] = useState<boolean>(false);
+  const [data, setData] = useState({
+    fullName: "",
+    userName: "",
+    description: "",
+    followersCount: "",
+    isFollowed: false,
+    blogs: [{ _id: "" }],
+  });
+  const { setStatus, setUser } = UseUserContext();
+  const { userName } = useParams();
   useEffect(() => {
     setLoading(false);
+    // console.log(userName);
+    const userData = getItemLocalStorage("isUserLoggedIn");
+    const token = getItemStringLocalStorage("token");
+    if (userData && token) {
+      setStatus(true);
+      setUser(userData);
+      getUser(userName.toString(), token)
+        .then((e) => {
+          if (e.success) {
+            console.log(e.data);
+            setData(e.data);
+            if (e.userName === userData.userName) {
+              setOwner(true);
+            }
+          } else {
+            console.log("Response error ", e);
+          }
+        })
+        .catch((err) => {
+          console.log("The error is ", err);
+        })
+        .finally(() => setLoading((prev) => !prev));
+    }
   }, []);
   return (
     <div className="bg-slate-200 py-4 min-h-dvh px-2">
@@ -27,7 +67,7 @@ function page() {
           )}
         </div>
         <div className="flex bg-white py-8 flex-col items-center justify-center sm:flex-row">
-          <div className="m-2 relative group w-32 h-32 sm:w-40 sm:h-40">
+          <div className="m-2 relative group w-32 h-32  sm:w-40 sm:h-40">
             <img
               className="rounded-full w-full"
               src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlcnxlbnwwfHwwfHx8MA%3D%3D"
@@ -39,18 +79,14 @@ function page() {
               </div>
             )}
           </div>
-          <div className="mx-4 group relative">
+          <div className="mx-4 group min-w-[50%] relative">
             {/* <input value="Abhradip Paul" className="text-3xl my-4 font-semibold text-gray-800 sm:text-4xl"/> */}
-            <CustomEditInput value="Abhradip Paul" edit={edit} />
+            <CustomEditInput value={data.fullName} edit={edit} />
             <p className="my-2 text-lg sm:text-xl">
-              @abhradippaul . 0 follower . 0 blogs
+              @{data.userName} . {data.followersCount} follower . {data.blogs.length} blogs
             </p>
-            <p className="my-2">
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Mollitia
-              nisi fuga cum doloremque omnis totam dolorum distinctio suscipit
-              modi fugit.
-            </p>
-            <CustomFollowButton />
+            <p className="my-2">{data.description}</p>
+            <CustomFollowButton isFollowed={data.isFollowed} />
             {owner && !edit && (
               <div
                 className="group-hover:flex hidden absolute right-0 bottom-[0] bg-white rounded-full w-8 h-8 items-center justify-center"
@@ -79,7 +115,14 @@ function page() {
           </div>
         </div>
         <hr />
-        <div className="my-4">{!loading && <Card />}</div>
+        <div className="flex flex-wrap w-[90%] mx-auto justify-around">
+          {data.blogs.map((e) => (
+            <div className="my-4">
+              {!loading && <Card value={e} owner={owner} key={e._id} />}
+            </div>
+          ))}
+        </div>
+        {/* <div className="my-4">{!loading && <Card />}</div> */}
       </div>
     </div>
   );
