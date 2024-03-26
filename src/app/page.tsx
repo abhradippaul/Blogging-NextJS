@@ -2,6 +2,7 @@
 import { UseUserContext } from "@/Context/UserContext";
 import Card from "@/components/Card";
 import { blogApi } from "@/utils/ConnectApi";
+import { getItemLocalStorage } from "@/utils/LocalStorage";
 import { useEffect, useState } from "react";
 
 // interface Value {
@@ -18,18 +19,24 @@ import { useEffect, useState } from "react";
 export default function Home() {
   const [loading, setLoading] = useState<boolean>();
   const [data, setData] = useState<Array<any>>([]);
-  const { user, status, setStatus } = UseUserContext();
+  const { user, setUser, status, setStatus } = UseUserContext();
   useEffect(() => {
-    setLoading(false)
-    setStatus(true)
-    // blogApi("blog")
-    //   .then((e) => {
-    //     setData(e.data);
-    //   })
-    //   .catch((e) => {
-    //     console.log("The error is ", e);
-    //   })
-    //   .finally(() => setLoading((prev) => !prev));
+    setLoading(false);
+    const userData = getItemLocalStorage("isUserLoggedIn");
+    if (userData) {
+      setStatus(true);
+      setUser(userData);
+    }
+    blogApi("blog")
+      .then((e) => {
+        if (e.success) {
+          setData(e.data);
+        }
+      })
+      .catch((e) => {
+        console.log("The error is ", e);
+      })
+      .finally(() => setLoading((prev) => !prev));
   }, []);
 
   return (

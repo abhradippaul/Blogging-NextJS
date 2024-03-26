@@ -25,7 +25,7 @@ type ChildrenValue = {
 
 function UserContextProvider({ children }: ChildrenValue) {
   const [user, setUser] = useState({});
-  const [status, setStatus] = useState(false);
+  const [status, setStatus] = useState<boolean>(false);
   return (
     <UserContext.Provider value={{ user, setUser, status, setStatus }}>
       {children}

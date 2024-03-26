@@ -1,13 +1,16 @@
 "use client";
+import { UseUserContext } from "@/Context/UserContext";
 import CustomTextarea from "@/components/FormElement/CustomTextarea";
 import Input from "@/components/FormElement/Input";
 import SubmitButton from "@/components/FormElement/SubmitButton";
 import { uploadBlog } from "@/utils/ConnectApi";
 import { blogUploadForm } from "@/utils/FormComponent";
-import React, { useId, useState } from "react";
+import { getItemLocalStorage, getItemStringLocalStorage } from "@/utils/LocalStorage";
+import React, { useEffect, useId, useState } from "react";
 
 function page() {
   const [loading, setLoading] = useState<boolean>();
+  const {setStatus , setUser} = UseUserContext()
   const formData = new FormData();
   const [data, setData] = useState({
     title: "",
@@ -20,17 +23,27 @@ function page() {
     formData.set("title", data.title);
     formData.set("slug", data.slug);
     formData.set("content", data.content);
-    uploadBlog(formData)
-      .then((e) => {
-        console.log(e);
-      })
-      .catch((err) => {
-        console.log("The error is ", err);
-      })
-      .finally(() => {
-        setLoading((prev) => !prev);
-      });
+    const token = getItemStringLocalStorage("token");
+    if (token) {
+      uploadBlog(formData, token)
+        .then((e) => {
+          console.log(e);
+        })
+        .catch((err) => {
+          console.log("The error is ", err);
+        })
+        .finally(() => {
+          setLoading((prev) => !prev);
+        });
+    }
   };
+  useEffect(() => {
+    const userData = getItemLocalStorage("isUserLoggedIn");
+    if (userData) {
+      setStatus(true);
+      setUser(userData);
+    }
+  },[])
   return (
     <div className="bg-slate-200 min-h-dvh">
       <div className="max-w-7xl m-auto flex items-center justify-center px-4 py-8">

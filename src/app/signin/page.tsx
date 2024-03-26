@@ -10,6 +10,7 @@ import {
   signInForm,
   submitButtonClass,
 } from "@/utils/FormComponent";
+import { getItemLocalStorage, setItemLocalStorage } from "@/utils/LocalStorage";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useId, useState } from "react";
@@ -25,14 +26,23 @@ function page() {
   const handleOnSubmit = (e: any) => {
     e.preventDefault();
     setLoading(true);
-    console.log(data);
     signInUser(data)
       .then((e) => {
         if (e.success) {
-          setStatus((prev) => !prev);
-          router.push("/");
+          const token = {
+            access_Token: e.accessToken,
+            refresh_Token: e.refreshToken,
+          };
+          setItemLocalStorage("isUserLoggedIn", e.user);
+          setItemLocalStorage("token", token);
+          const getlLocalStorage = getItemLocalStorage("isUserLoggedIn");
+          const getTokenLocalStorage = getItemLocalStorage("token");
+          if (getlLocalStorage && getTokenLocalStorage) {
+            setStatus((prev) => !prev);
+            setUser(e.user);
+            router.push("/");
+          }
         }
-        console.log(e);
       })
       .catch((err) => {
         console.log("The error is ", err);

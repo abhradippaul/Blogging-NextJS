@@ -20,7 +20,7 @@ export const signUpUser = async (userData: any) => {
   try {
     const response = await fetch(url + "user/create", {
       method: "POST",
-
+      credentials: "include",
       body: userData,
     });
     const data = await response.json();
@@ -35,6 +35,7 @@ export const signInUser = async (userData: any) => {
     console.log(userData)
     const response = await fetch(url + "user/login", {
       method: "POST",
+      credentials: "include",
       headers : {
         "Content-Type" : "application/json"
       },
@@ -47,11 +48,15 @@ export const signInUser = async (userData: any) => {
   }
 };
 
-export const uploadBlog = async (blogData:any) => {
+export const uploadBlog = async (blogData:any, token:string) => {
   console.log(blogData)
   try {
     const response = await fetch(url + "blog", {
       method: "POST",
+      credentials: "include",
+      headers : {
+        "authkey" : token
+      },
       body: blogData
     });
     const data = await response.json();
