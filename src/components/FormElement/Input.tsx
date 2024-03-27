@@ -34,7 +34,7 @@ const Input = React.forwardRef(
     ref
   ) => {
     const id = useId();
-    const [info, setInfo] = useState<string>();
+    const [info, setInfo] = useState<string>(data[name]);
     return (
       <div className={outsideDivClass}>
         {label && (

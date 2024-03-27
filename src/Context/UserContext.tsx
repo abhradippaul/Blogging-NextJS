@@ -1,11 +1,23 @@
 "use client";
-import { ReactNode, createContext, useContext, useState } from "react";
+import {
+  getItemLocalStorage,
+  getItemStringLocalStorage,
+} from "@/utils/LocalStorage";
+import {
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 interface ContextValue {
   status: boolean;
   setStatus: React.Dispatch<React.SetStateAction<boolean>>;
   user: object;
   setUser: React.Dispatch<React.SetStateAction<object>>;
+  token: string;
+  setToken: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const UserContext = createContext<ContextValue>({
@@ -13,6 +25,8 @@ export const UserContext = createContext<ContextValue>({
   setStatus: () => {},
   user: {},
   setUser: () => {},
+  token: "",
+  setToken: () => {},
 });
 
 export const UseUserContext = () => {
@@ -26,8 +40,11 @@ type ChildrenValue = {
 function UserContextProvider({ children }: ChildrenValue) {
   const [user, setUser] = useState({});
   const [status, setStatus] = useState<boolean>(false);
+  const [token, setToken] = useState<string>("");
   return (
-    <UserContext.Provider value={{ user, setUser, status, setStatus }}>
+    <UserContext.Provider
+      value={{ user, setUser, status, setStatus, token, setToken }}
+    >
       {children}
     </UserContext.Provider>
   );

@@ -1,3 +1,4 @@
+"use client"
 import { SetStateAction } from "react";
 
 interface Data {
@@ -21,6 +22,7 @@ function CustomTextarea({
   setData,
   id
 }: PropsValue) {
+  // console.log(data)
   return (
     <div>
       <textarea

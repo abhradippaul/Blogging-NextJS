@@ -4,40 +4,43 @@ import CustomConfirm from "@/components/FormElement/CustomConfirm";
 import CustomFileUpload from "@/components/CustomFileUpload";
 import CustomFollowButton from "@/components/FormElement/CustomFollowButton";
 import Input from "@/components/FormElement/Input";
-import { blog } from "@/data";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import EditOrDelete from "@/components/FormElement/EditOrDelete";
 import CustomTextarea from "@/components/FormElement/CustomTextarea";
-import {
-  getItemLocalStorage,
-  getItemStringLocalStorage,
-} from "@/utils/LocalStorage";
 import { UseUserContext } from "@/Context/UserContext";
 import { getBlog } from "@/utils/ConnectApi";
 import { useParams } from "next/navigation";
+import { getLocalSetContext } from "@/utils/GetFromLocalStorage";
+import CustomIcon from "@/components/IconElement/CustomIcon";
 
 function page() {
   const [owner, setOwner] = useState<boolean>();
   const [edit, setEdit] = useState<boolean>(false);
-  const [data, setData] = useState<object>({});
+  const [data, setData] = useState<any>({});
   const [loading, setLoading] = useState<boolean>();
-  const { setStatus, setUser } = UseUserContext();
+  const [text, setText] = useState({});
+  const { setStatus, setUser, setToken } = UseUserContext();
   const { blogName } = useParams();
+  const imageIconClass =
+    "border py-2 text-xl rounded-md w-1/3 flex items-center justify-center sm:text-2xl hover:bg-slate-50";
   useEffect(() => {
-    setLoading(false);
-    const userData = getItemLocalStorage("isUserLoggedIn");
-    const token = getItemStringLocalStorage("token");
-    if (userData && token) {
+    setLoading(true);
+    const getItem = getLocalSetContext();
+    if (getItem) {
       setStatus(true);
-      setUser(userData);
-      // console.log(test)
-      getBlog(blogName.toString(), token)
+      setUser(getItem.userData);
+      setToken(getItem.token);
+      getBlog(blogName.toString(), getItem.token)
         .then((e) => {
           if (e.success) {
-            console.log(e.data);
+            // console.log(e.data);
             setData(e.data);
-            setOwner(e.data.owner.userName === userData.userName);
+            setOwner(e.data.owner.userName === getItem.userData.userName);
+            setText({
+              title: e.data.title,
+              content: e.data.content,
+            });
           }
         })
         .catch((err) => {
@@ -49,8 +52,10 @@ function page() {
 
   const commentBtn = () => {
     const btn = document.querySelector("#comment-btn");
-    if (btn) {
+    const comment_input = document.querySelector("#comment-input");
+    if (btn && comment_input) {
       btn.classList.toggle("invisible");
+      comment_input.classList.toggle("border-black");
     }
   };
 
@@ -70,10 +75,10 @@ function page() {
 
   useEffect(() => {
     textareaResize();
-    setData({
-      title: blog.data.title,
-      description: blog.data.content,
-    });
+    // setData({
+    //   title: blog.data.title,
+    //   description: blog.data.content,
+    // });
   }, []);
 
   return (
@@ -91,12 +96,12 @@ function page() {
                   />
                   <div>
                     <Link
-                      href={`/user/${blog.data.owner.userName}`}
+                      href={`/user/${data.owner?.userName}`}
                       className="font-semibold text-lg sm:text-xl text-gray-700 hover:text-black"
                     >
-                      {blog.data.owner.fullName}
+                      {data.owner?.fullName}
                     </Link>
-                    <h6>4 Followers</h6>
+                    <h6>0 Followers</h6>
                   </div>
                 </div>
                 {!owner ? (
@@ -118,17 +123,17 @@ function page() {
                 <Input
                   name="title"
                   readonly={!edit}
-                  data={data}
+                  data={text}
                   inputClass={`w-full py-2 text-xl font-bold my-4 ${
                     !edit && "border-none"
                   } border-2 rounded-md outline-none sm:text-3xl`}
-                  setData={setData}
+                  setData={setText}
                 />
                 <CustomTextarea
                   edit={edit}
-                  name="description"
-                  data={data}
-                  setData={setData}
+                  name="content"
+                  data={text}
+                  setData={setText}
                   textareaClass={`mb-4 w-full py-2 resize-none outline-none border-2 rounded-md ${
                     !edit && "border-none"
                   }`}
@@ -137,27 +142,30 @@ function page() {
                 {edit && <CustomConfirm setEdit={setEdit} edit={edit} />}
               </div>
               <div className="flex items-center justify-between cursor-pointer">
-                <div className="border py-2 text-xl rounded-md w-1/3 flex items-center justify-center sm:text-2xl hover:bg-slate-50">
-                  <i className="fa-regular fa-heart"></i>
-                </div>
-                <div
-                  className="border py-2 text-xl rounded-md w-1/3 flex items-center justify-center sm:text-2xl hover:bg-slate-50"
-                  onClick={commentBtn}
-                >
-                  <i className="fa-regular fa-comment"></i>
-                </div>
-                <div className="border text-xl rounded-md w-1/3 flex items-center justify-center sm:text-2xl py-2 hover:bg-slate-50">
-                  <img
-                    src="https://cdn-icons-png.flaticon.com/128/2990/2990295.png"
-                    className="h-6"
-                    alt="share"
-                  />
-                </div>
+                <CustomIcon
+                  outerClass={imageIconClass}
+                  innerClass="fa-regular fa-heart"
+                  value="4"
+                />
+                <CustomIcon
+                  outerClass={imageIconClass}
+                  innerClass="fa-regular fa-comment"
+                  value="2"
+                  valueFunction={commentBtn}
+                />
+                <CustomIcon
+                  outerClass={imageIconClass}
+                  innerClass="h-8"
+                  srcAndAlt={{
+                    src: "https://cdn-icons-png.flaticon.com/128/2990/2990295.png",
+                    alt: "share",
+                  }}
+                />
               </div>
             </div>
           </div>
           <div className="bg-white rounded-md p-6">
-            <h1 className="text-xl font-semibold sm:text-2xl">12 Comments</h1>
+            <h1 className="text-xl font-semibold sm:text-2xl">1 Comments</h1>
             <div className="flex items-center justify-between my-4">
               <img
                 className="w-10 h-10 sm:w-20 sm:h-20"
@@ -167,6 +175,7 @@ function page() {
               <div className="w-full text-lg">
                 <input
                   type="text"
+                  id="comment-input"
                   placeholder="Add a comment"
                   className="outline-none w-full border-b-2"
                   onFocus={commentBtn}

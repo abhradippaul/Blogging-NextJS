@@ -2,9 +2,11 @@
 import Link from "next/link";
 import LoggedIn from "./LoggedIn";
 import { UseUserContext } from "@/Context/UserContext";
+import { useEffect, useState } from "react";
 
 function Navbar() {
   // const [navControl, setNavControl] = useState<boolean>(false);
+  const [loading,setLoading] = useState<boolean>(true);
   const {status, user} = UseUserContext()
   // console.log(user)
   const hamburgerClick = () => {
@@ -17,8 +19,11 @@ function Navbar() {
       sideNavbar.classList.toggle("sideNavbar");
     }
   };
+  useEffect(() => {
+    setLoading(false)
+  },[])
 
-  return (
+  return !loading && (
     <nav className="h-16 bg-slate-100 flex items-center">
       <i
         className="fa-solid fa-bars mx-2 text-2xl cursor-pointer sm:text-4xl sm:mx-4 z-20"

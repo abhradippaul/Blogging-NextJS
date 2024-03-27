@@ -9,6 +9,7 @@ type PropsValue = {
 };
 
 function LoggedIn({ isLoggedIn,user }: PropsValue) {
+  const className = "border-2 text-xl border-green-500 px-4 py-1  rounded-md hover:bg-green-500 hover:text-white sm:text-2xl"
   if (isLoggedIn) {
 
     return (
@@ -23,6 +24,7 @@ function LoggedIn({ isLoggedIn,user }: PropsValue) {
             alt="User image"
           />
         </Link>
+        {/* <SubmitButton children="Logout" className={className}/> */}
       </div>
     );
   } else {
@@ -30,7 +32,7 @@ function LoggedIn({ isLoggedIn,user }: PropsValue) {
       <Link href="/signin">
         <SubmitButton
           children="Sign In"
-          className="border-2 text-xl border-green-500 px-4 py-1  rounded-md hover:bg-green-500 hover:text-white sm:text-2xl"
+          className={className}
         />
       </Link>
     );
