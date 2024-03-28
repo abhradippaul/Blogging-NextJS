@@ -29,9 +29,9 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <UserContextProvider>
-        <Navbar />
-        {children}
-        {/* <Footer /> */}
+          <Navbar />
+          {children}
+          {/* <Footer /> */}
         </UserContextProvider>
       </body>
     </html>

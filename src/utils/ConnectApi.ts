@@ -98,3 +98,37 @@ export const getBlog = async(blogId:string,token:string) => {
     return err;
   }
 }
+
+export const updateBlog = async(blogId:string, token:string, newData:string) => {
+  try {
+    const response = await fetch(url + `blog\/${blogId}`, {
+      method: "PUT",
+      credentials: "include",
+      headers : {
+        "authkey" : token,
+        "Content-Type" : "application/json"
+      },
+      body : newData
+    })
+    const data = await response.json();
+    return data
+  } catch (err) {
+    return err;
+  }
+}
+
+export const deleteBlog = async(blogId:string, token:string) => {
+  try {
+    const response = await fetch(url + `blog\/${blogId}`, {
+      method: "DELETE",
+      credentials: "include",
+      headers : {
+        "authkey" : token
+      }
+    })
+    const data = await response.json();
+    return data
+  } catch (err) {
+    return err;
+  }
+}

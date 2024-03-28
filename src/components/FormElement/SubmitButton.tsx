@@ -3,22 +3,30 @@ type PropsValue = {
   children: string;
   className?: string;
   setEdit?: React.Dispatch<SetStateAction<boolean>> | null;
+  functionality?: () => void | null;
 };
-function SubmitButton({ children, className = "", setEdit }: PropsValue) {
-  if (setEdit) {
-    return (
-      <button
-        onClick={() => {
+function SubmitButton({
+  children,
+  className = "",
+  setEdit,
+  functionality,
+}: PropsValue) {
+  return (
+    <button
+      onClick={() => {
+        if (setEdit) {
           setEdit((prev) => !prev);
-        }}
-        className={className}
-      >
-        {children}
-      </button>
-    );
-  } else {
-    return <button className={className}>{children}</button>;
-  }
+        } else {
+          if (functionality) {
+            functionality();
+          }
+        }
+      }}
+      className={className}
+    >
+      {children}
+    </button>
+  );
 }
 
 export default SubmitButton;

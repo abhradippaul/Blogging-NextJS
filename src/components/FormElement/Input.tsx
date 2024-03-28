@@ -1,4 +1,5 @@
-import React, { createRef, useId, useRef, useState } from "react";
+"use client";
+import React, { createRef, useEffect, useId, useRef, useState } from "react";
 
 interface Data {
   [key: string]: any;
@@ -29,12 +30,12 @@ const Input = React.forwardRef(
       required = true,
       readonly = false,
       data,
-      setData
+      setData,
     }: PropsValue,
     ref
   ) => {
     const id = useId();
-    const [info, setInfo] = useState<string>(data[name]);
+    const innerRef = () => (ref || createRef(), [ref]);
     return (
       <div className={outsideDivClass}>
         {label && (
@@ -45,14 +46,18 @@ const Input = React.forwardRef(
         <input
           type={type}
           id={id}
-          value={info}
+          ref={innerRef}
+          value={data[name]}
           onChange={(e) => {
-            setInfo(e.target.value);
-          }}
-          onBlur={() => {
-            if (info) {
-              setData((prev:any) => ({ ...prev, [name]: info }));
+            if (name === "title" && readonly) {
+              // console.log(e.target.value)
+              setData((prev: any) => ({
+                ...prev,
+                [name]: e.target.value,
+                slug: e.target.value.replaceAll(" ", "-"),
+              }));
             }
+            setData((prev: any) => ({ ...prev, [name]: e.target.value }));
           }}
           required={required}
           readOnly={readonly}

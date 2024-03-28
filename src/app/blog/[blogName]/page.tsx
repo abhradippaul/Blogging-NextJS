@@ -5,12 +5,19 @@ import CustomFileUpload from "@/components/CustomFileUpload";
 import CustomFollowButton from "@/components/FormElement/CustomFollowButton";
 import Input from "@/components/FormElement/Input";
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
+import {
+  MutableRefObject,
+  createRef,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import EditOrDelete from "@/components/FormElement/EditOrDelete";
 import CustomTextarea from "@/components/FormElement/CustomTextarea";
 import { UseUserContext } from "@/Context/UserContext";
-import { getBlog } from "@/utils/ConnectApi";
-import { useParams } from "next/navigation";
+import { deleteBlog, getBlog, updateBlog } from "@/utils/ConnectApi";
+import { useParams, useRouter } from "next/navigation";
 import { getLocalSetContext } from "@/utils/GetFromLocalStorage";
 import CustomIcon from "@/components/IconElement/CustomIcon";
 
@@ -20,8 +27,10 @@ function page() {
   const [data, setData] = useState<any>({});
   const [loading, setLoading] = useState<boolean>();
   const [text, setText] = useState({});
-  const { setStatus, setUser, setToken } = UseUserContext();
+  const { setStatus, setUser, setToken, token } = UseUserContext();
   const { blogName } = useParams();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
   const imageIconClass =
     "border py-2 text-xl rounded-md w-1/3 flex items-center justify-center sm:text-2xl hover:bg-slate-50";
   useEffect(() => {
@@ -55,31 +64,45 @@ function page() {
     const comment_input = document.querySelector("#comment-input");
     if (btn && comment_input) {
       btn.classList.toggle("invisible");
-      comment_input.classList.toggle("border-black");
+      if (inputRef.current) {
+        console.log(inputRef.current);
+        inputRef.current.classList.toggle("border-black");
+        inputRef.current.focus();
+      }
     }
   };
 
-  const editBlog = () => {
-    setEdit((prev) => !prev);
+  const updateNewBlog = () => {
+    // console.log(text)
+    const blogId = data._id;
+    if (blogId && token && text) {
+      // console.log("Test")
+      updateBlog(blogId, token, JSON.stringify(text))
+        .then((e) => {
+          if (e.success) {
+            window.location.reload();
+          }
+        })
+        .catch((err) => {
+          console.log("The error is ", err);
+        });
+    }
   };
 
-  const textareaResize = useCallback(() => {
-    const targetarea = Array.from(document.querySelectorAll("textarea"));
-    if (targetarea.length) {
-      targetarea.forEach((e) => {
-        e.style.height = "auto";
-        e.style.height = `${e.scrollHeight}px`;
-      });
+  const deleteNewBlog = () => {
+    const blogId = data._id;
+    if (blogId && token) {
+      deleteBlog(blogId, token)
+        .then((e) => {
+          if (e.success) {
+            router.push("/");
+          }
+        })
+        .catch((err) => {
+          console.log("The error is ", err);
+        });
     }
-  }, []);
-
-  useEffect(() => {
-    textareaResize();
-    // setData({
-    //   title: blog.data.title,
-    //   description: blog.data.content,
-    // });
-  }, []);
+  };
 
   return (
     loading && (
@@ -107,7 +130,10 @@ function page() {
                 {!owner ? (
                   <CustomFollowButton />
                 ) : (
-                  <EditOrDelete setEdit={setEdit} />
+                  <EditOrDelete
+                    functionality={deleteNewBlog}
+                    setEdit={setEdit}
+                  />
                 )}
               </div>
               {/* <h1>{Date.now()}</h1> */}
@@ -124,6 +150,7 @@ function page() {
                   name="title"
                   readonly={!edit}
                   data={text}
+                  ref={inputRef}
                   inputClass={`w-full py-2 text-xl font-bold my-4 ${
                     !edit && "border-none"
                   } border-2 rounded-md outline-none sm:text-3xl`}
@@ -139,7 +166,9 @@ function page() {
                   }`}
                 />
 
-                {edit && <CustomConfirm setEdit={setEdit} edit={edit} />}
+                {edit && (
+                  <CustomConfirm setEdit={setEdit} onSave={updateNewBlog} />
+                )}
               </div>
               <div className="flex items-center justify-between cursor-pointer">
                 <CustomIcon
@@ -178,6 +207,7 @@ function page() {
                   id="comment-input"
                   placeholder="Add a comment"
                   className="outline-none w-full border-b-2"
+                  ref={inputRef}
                   onFocus={commentBtn}
                   onBlur={commentBtn}
                 />

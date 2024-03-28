@@ -22,6 +22,7 @@ function page() {
   });
   const { setUser, setStatus } = UseUserContext();
   const [loading, setLoading] = useState<boolean>();
+  const [error, setError] = useState<string>("");
   const router = useRouter();
   const handleOnSubmit = (e: any) => {
     e.preventDefault();
@@ -40,22 +41,25 @@ function page() {
           if (getlLocalStorage && getTokenLocalStorage) {
             setStatus((prev) => !prev);
             setUser(e.user);
+            router.push("/");
           }
+        } else {
+          console.log(e);
+          setError(e.message);
         }
       })
       .catch((err) => {
         console.log("The error is ", err);
       })
       .finally(() => {
-        router.push("/");
         setLoading((prev) => !prev);
       });
   };
 
   return (
-    <div className="h-[90vh] w-full flex items-center justify-center bg-slate-200">
+    <div className="h-[93vh] w-full flex items-center justify-center bg-slate-200">
       <form
-        className="w-[90%] h-[50vh] max-h-[400px] max-w-[500px] bg-slate-100 py-2 px-4 flex flex-col justify-around"
+        className="w-[90%] h-[50vh] min-h-[400px] max-w-[500px] bg-slate-100 py-2 px-4 flex flex-col rounded-md justify-around"
         onSubmit={handleOnSubmit}
       >
         <h1 className="text-xl text-center font-bold text-gray-900 rounded-sm my-4 sm:text-2xl">
@@ -77,7 +81,7 @@ function page() {
           children={loading ? "Loading...." : "Submit"}
           className={submitButtonClass}
         />
-
+        {error && <h1 className="text-center text-red-600 text-xl">{error}</h1>}
         <div className="max-w-max mx-auto">
           <h1 className="text-base sm:text-lg">
             Don't have an account?{" "}

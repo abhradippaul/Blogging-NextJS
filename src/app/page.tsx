@@ -17,11 +17,11 @@ import { useEffect, useState } from "react";
 // }
 
 export default function Home() {
-  const [loading, setLoading] = useState<boolean>();
+  // const [loading, setLoading] = useState<boolean>();
   const [data, setData] = useState<Array<any>>([]);
   const { user, setUser, status, setStatus } = UseUserContext();
   useEffect(() => {
-    setLoading(false);
+    // setLoading(false);
     const userData = getItemLocalStorage("isUserLoggedIn");
     if (userData) {
       setStatus(true);
@@ -31,26 +31,28 @@ export default function Home() {
       .then((e) => {
         if (e.success) {
           setData(e.data);
+          // console.log(e.data)
         }
       })
       .catch((e) => {
         console.log("The error is ", e);
-      })
-      .finally(() => setLoading((prev) => !prev));
+      });
+    // .finally(() => setLoading((prev) => !prev));
   }, []);
 
   return (
-    data && (
       <main className="bg-slate-200 min-h-screen">
         <div className="max-w-7xl mx-auto px-2 py-4 flex flex-wrap gap-3 justify-around">
-          {loading ? (
+          {/* {loading ? (
             <h1>Loading....</h1>
-          ) : (
-            data.map((e) => <Card value={e} key={e._id} />)
-          )}
+          ) : ( */}
+          {data.map((e) => (
+            <Card value={e} key={e._id} />
+          ))}
+          {/* )} */}
           {/* <Card value={{test : "test"}} /> */}
         </div>
       </main>
-    )
+    
   );
 }

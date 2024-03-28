@@ -1,5 +1,5 @@
 "use client"
-import { SetStateAction } from "react";
+import { SetStateAction, useEffect } from "react";
 
 interface Data {
   [key: string]: any;
@@ -23,6 +23,16 @@ function CustomTextarea({
   id
 }: PropsValue) {
   // console.log(data)
+  useEffect(() => {
+    // console.log(id)
+    const targetarea = document.getElementById(`${id}`)
+    if(targetarea && data && !edit) {
+      // console.log(targetarea)
+      targetarea.style.height = "auto";
+      targetarea.style.height = `${targetarea.scrollHeight}px`;
+    }
+
+  },[data,edit])
   return (
     <div>
       <textarea

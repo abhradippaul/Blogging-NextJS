@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 
 function page() {
   const [loading, setLoading] = useState<boolean>(true);
-  const [owner, setOwner] = useState<boolean>(true);
+  const [owner, setOwner] = useState<boolean>(false);
   const [edit, setEdit] = useState<boolean>(false);
   const [data, setData] = useState({
     fullName: "",
@@ -36,9 +36,10 @@ function page() {
       getUser(userName.toString(), token)
         .then((e) => {
           if (e.success) {
-            console.log(e.data);
+            // console.log(e.data);
             setData(e.data);
-            if (e.userName === userData.userName) {
+            // console.log(e.data.userName,userData.userName)
+            if (e.data.userName === userData.userName) {
               setOwner(true);
             }
           } else {

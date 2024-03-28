@@ -3,11 +3,17 @@ import Link from "next/link";
 import LoggedIn from "./LoggedIn";
 import { UseUserContext } from "@/Context/UserContext";
 import { useEffect, useState } from "react";
+import {
+  followingUsers,
+  navbarCategory,
+  navbarTopMenu,
+} from "@/utils/NavbarComponents";
+import NavbarLink from "./NavbarLink";
 
 function Navbar() {
   // const [navControl, setNavControl] = useState<boolean>(false);
-  const [loading,setLoading] = useState<boolean>(true);
-  const {status, user} = UseUserContext()
+  const [loading, setLoading] = useState<boolean>(true);
+  const { status, user } = UseUserContext();
   // console.log(user)
   const hamburgerClick = () => {
     const bgBlackElement = document.querySelector<Element>("#bg-black");
@@ -20,11 +26,11 @@ function Navbar() {
     }
   };
   useEffect(() => {
-    setLoading(false)
-  },[])
+    setLoading(false);
+  }, []);
 
-  return !loading && (
-    <nav className="h-16 bg-slate-100 flex items-center">
+  return (
+    <nav className="h-[7dvh] bg-slate-100 flex items-center">
       <i
         className="fa-solid fa-bars mx-2 text-2xl cursor-pointer sm:text-4xl sm:mx-4 z-20"
         onClick={hamburgerClick}
@@ -36,69 +42,61 @@ function Navbar() {
       ></div>
       <div
         id="side-navbar"
-        className="fixed top-0 bottom-0 left-0 right-[50%] bg-slate-100 translate-x-[-100%] transformSideNavbar z-10 sm:right-[70%]"
+        className="fixed top-0 bottom-0 left-0 right-[50%] bg-slate-100 translate-x-[-100%] transformSideNavbar z-10 sm:right-[70%] overflow-y-scroll"
       >
         <div className="h-16"></div>
         <ul className="border text-xl p-4">
-          <li className="my-2">
-            <Link href="/" onClick={hamburgerClick}>
-              Home
-            </Link>
-          </li>
-          <li className="my-2">
-            <Link href="/following" onClick={hamburgerClick}>
-              Following
-            </Link>
-          </li>
-          <li className="my-2">
-            <Link href="/profile" onClick={hamburgerClick}>
-              Profile
-            </Link>
-          </li>
+          {navbarTopMenu.map((menu) => (
+            <NavbarLink
+              children={menu.label}
+              link={menu.path}
+              key={menu.label}
+              liClassName="my-1 px-1 py-2 hover:bg-slate-200 cursor-pointer rounded-md"
+              hamburgerClick={hamburgerClick}
+            />
+          ))}
         </ul>
         <div className="border text-xl p-4">
           <h1 className="my-2">Following</h1>
           <ul>
-            <li className="my-2">
-              <Link href="/user1" onClick={hamburgerClick}>
-                user1
-              </Link>
-            </li>
-            <li className="my-2">
-              <Link href="/user2" onClick={hamburgerClick}>
-                user2
-              </Link>
-            </li>
-            <li className="my-2">
-              <Link href="/user3" onClick={hamburgerClick}>
-                user3
-              </Link>
-            </li>
-            <li className="my-2">
-              <Link href="/user4" onClick={hamburgerClick}>
-                user4
-              </Link>
-            </li>
+            {followingUsers.map((menu) => (
+              <NavbarLink
+                children={menu.label}
+                link={menu.path}
+                key={menu.label}
+                liClassName="my-1 px-1 py-2 hover:bg-slate-200 cursor-pointer rounded-md"
+                hamburgerClick={hamburgerClick}
+              />
+            ))}
           </ul>
         </div>
-        <div>
-          <h1>Explore</h1>
+        <div className="border text-xl p-4">
+          <h1 className="my-2 font-semibold">Explore</h1>
           <ul>
-            <li>
-              <Link onClick={hamburgerClick} href="/science">
-                Science
-              </Link>
-            </li>
-            <li>
-              <Link onClick={hamburgerClick} href="/gaming">
-                Gaming
-              </Link>
-            </li>
-            <li>
-              <Link onClick={hamburgerClick} href="/technology">
-                Technology
-              </Link>
-            </li>
+            {navbarCategory.map((menu) => (
+              <NavbarLink
+                children={menu.label}
+                link={menu.path}
+                key={menu.label}
+                liClassName="my-1 px-1 py-2 hover:bg-slate-200 cursor-pointer rounded-md"
+                hamburgerClick={hamburgerClick}
+              />
+            ))}
+            {/* <li>
+                <Link onClick={hamburgerClick} href="/science">
+                  Science
+                </Link>
+              </li>
+              <li>
+                <Link onClick={hamburgerClick} href="/gaming">
+                  Gaming
+                </Link>
+              </li>
+              <li>
+                <Link onClick={hamburgerClick} href="/technology">
+                  Technology
+                </Link>
+              </li> */}
           </ul>
         </div>
       </div>
