@@ -15,12 +15,11 @@ import Link from "next/link";
 
 type PropsValue = {
   value: any;
-  owner?: boolean;
 };
-function Card({ value, owner = false }: PropsValue) {
+function Card({ value }: PropsValue) {
   return (
     <Link
-      href={`/blog/${value._id}`}
+      href={`/blog/${value.slug}`}
       className="h-[400px] w-[250px] rounded-md bg-white flex items-center justify-around flex-col px-4 py-2 sm:h-[500px] sm:w-[300px]"
     >
       {/* <h1 className="text-sm sm:text-base">{CheckTimeAgo(value.createdAt)}</h1> */}

@@ -132,3 +132,85 @@ export const deleteBlog = async(blogId:string, token:string) => {
     return err;
   }
 }
+
+export const addComment = async(commentData:string,blogId:string,token:string) => {
+  try {
+    const response = await fetch(url + `blog\/${blogId}/comment`, {
+      method: "POST",
+      credentials: "include",
+      headers : {
+        "authkey" : token,
+        "Content-Type" : "application/json"
+      },
+      body : commentData
+    })
+    const data = await response.json();
+    return data
+  } catch (err) {
+    return err;
+  }
+}
+
+export const followUser = async(channelId:string,token:string) => {
+  try {
+    const response = await fetch(url + `user\/${channelId}/follow`, {
+      method: "POST",
+      credentials: "include",
+      headers : {
+        "authkey" : token
+      }
+    })
+    const data = await response.json();
+    return data
+  } catch (err) {
+    return err;
+  }
+}
+
+export const unfollowUser = async(channelId:string,token:string) => {
+  try {
+    const response = await fetch(url + `user\/${channelId}/follow`, {
+      method: "DELETE",
+      credentials: "include",
+      headers : {
+        "authkey" : token
+      }
+    })
+    const data = await response.json();
+    return data
+  } catch (err) {
+    return err;
+  }
+}
+
+export const giveLike = async(blogId:string,token:string) =>{
+  try {
+    const response = await fetch(url + `blog\/${blogId}/like`, {
+      method: "POST",
+      credentials: "include",
+      headers : {
+        "authkey" : token
+      }
+    })
+    const data = await response.json();
+    return data
+  } catch (err) {
+    return err;
+  }
+}
+
+export const removeLike = async(blogId:string,token:string) =>{
+  try {
+    const response = await fetch(url + `blog\/${blogId}/like`, {
+      method: "DELETE",
+      credentials: "include",
+      headers : {
+        "authkey" : token
+      }
+    })
+    const data = await response.json();
+    return data
+  } catch (err) {
+    return err;
+  }
+}

@@ -11,3 +11,8 @@ export const getLocalSetContext = () => {
         return null
     }
 }
+
+export const setLocalSetContext = (token:string,userData:object) => {
+  localStorage.setItem("token",token)
+  localStorage.setItem("isUserLoggedIn",JSON.stringify(userData))
+}

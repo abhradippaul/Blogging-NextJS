@@ -14,8 +14,8 @@ import {
 interface ContextValue {
   status: boolean;
   setStatus: React.Dispatch<React.SetStateAction<boolean>>;
-  user: object;
-  setUser: React.Dispatch<React.SetStateAction<object>>;
+  user: any;
+  setUser: React.Dispatch<React.SetStateAction<any>>;
   token: string;
   setToken: React.Dispatch<React.SetStateAction<string>>;
 }
