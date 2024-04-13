@@ -32,14 +32,14 @@ export const signUpUser = async (userData: any) => {
 
 export const signInUser = async (userData: any) => {
   try {
-    console.log(userData)
+    console.log(userData);
     const response = await fetch(url + "user/login", {
       method: "POST",
       credentials: "include",
-      headers : {
-        "Content-Type" : "application/json"
+      headers: {
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(userData)
+      body: JSON.stringify(userData),
     });
     const data = await response.json();
     return data;
@@ -48,169 +48,213 @@ export const signInUser = async (userData: any) => {
   }
 };
 
-export const uploadBlog = async (blogData:any, token:string) => {
+export const uploadBlog = async (blogData: any, token: string) => {
   // console.log(blogData)
   try {
     const response = await fetch(url + "blog", {
       method: "POST",
       credentials: "include",
-      headers : {
-        "authkey" : token
+      headers: {
+        authkey: token,
       },
-      body: blogData
+      body: blogData,
     });
     const data = await response.json();
     return data;
   } catch (err) {
     return err;
   }
-}
+};
 
-export const getUser = async(userName:string,token:string) => {
+export const getUser = async (userName: string, token: string) => {
   try {
     const response = await fetch(url + `user\/${userName}`, {
       method: "GET",
       credentials: "include",
-      headers : {
-        "authkey" : token
-      }
-    })
+      headers: {
+        authkey: token,
+      },
+    });
     const data = await response.json();
-    return data
+    return data;
   } catch (err) {
     return err;
   }
+};
 
-}
-
-export const getBlog = async(blogId:string,token:string) => {
+export const getBlog = async (blogId: string, token: string) => {
   try {
     const response = await fetch(url + `blog\/${blogId}`, {
       method: "GET",
       credentials: "include",
-      headers : {
-        "authkey" : token
-      }
-    })
+      headers: {
+        authkey: token,
+      },
+    });
     const data = await response.json();
-    return data
+    return data;
   } catch (err) {
     return err;
   }
-}
+};
 
-export const updateBlog = async(blogId:string, token:string, newData:string) => {
+export const updateBlog = async (
+  blogId: string,
+  token: string,
+  newData: string
+) => {
   try {
     const response = await fetch(url + `blog\/${blogId}`, {
       method: "PUT",
       credentials: "include",
-      headers : {
-        "authkey" : token,
-        "Content-Type" : "application/json"
+      headers: {
+        authkey: token,
+        "Content-Type": "application/json",
       },
-      body : newData
-    })
+      body: newData,
+    });
     const data = await response.json();
-    return data
+    return data;
   } catch (err) {
     return err;
   }
-}
+};
 
-export const deleteBlog = async(blogId:string, token:string) => {
+export const deleteBlog = async (blogId: string, token: string) => {
   try {
     const response = await fetch(url + `blog\/${blogId}`, {
       method: "DELETE",
       credentials: "include",
-      headers : {
-        "authkey" : token
-      }
-    })
+      headers: {
+        authkey: token,
+      },
+    });
     const data = await response.json();
-    return data
+    return data;
   } catch (err) {
     return err;
   }
-}
+};
 
-export const addComment = async(commentData:string,blogId:string,token:string) => {
+export const addComment = async (
+  commentData: string,
+  blogId: string,
+  token: string
+) => {
   try {
     const response = await fetch(url + `blog\/${blogId}/comment`, {
       method: "POST",
       credentials: "include",
-      headers : {
-        "authkey" : token,
-        "Content-Type" : "application/json"
+      headers: {
+        authkey: token,
+        "Content-Type": "application/json",
       },
-      body : commentData
-    })
+      body: commentData,
+    });
     const data = await response.json();
-    return data
+    return data;
   } catch (err) {
     return err;
   }
-}
+};
 
-export const followUser = async(channelId:string,token:string) => {
+export const updateBlogComment = async (
+  commentId: string,
+  token: string,
+  commentData: string
+) => {
+  try {
+    const response = await fetch(url + `blog\/${commentId}/comment`, {
+      method: "PUT",
+      credentials: "include",
+      headers: {
+        authkey: token,
+      },
+      body: commentData,
+    });
+    const data = await response.json();
+    return data;
+  } catch (err) {
+    return err;
+  }
+};
+
+export const deleteBlogComment = async (commentId: string, token: string) => {
+  try {
+    const response = await fetch(url + `blog\/${commentId}/comment`, {
+      method: "DELETE",
+      credentials: "include",
+      headers: {
+        authkey: token,
+      },
+    });
+    const data = await response.json();
+    return data;
+  } catch (err) {
+    return err;
+  }
+};
+
+export const followUser = async (channelId: string, token: string) => {
   try {
     const response = await fetch(url + `user\/${channelId}/follow`, {
       method: "POST",
       credentials: "include",
-      headers : {
-        "authkey" : token
-      }
-    })
+      headers: {
+        authkey: token,
+      },
+    });
     const data = await response.json();
-    return data
+    return data;
   } catch (err) {
     return err;
   }
-}
+};
 
-export const unfollowUser = async(channelId:string,token:string) => {
+export const unfollowUser = async (channelId: string, token: string) => {
   try {
     const response = await fetch(url + `user\/${channelId}/follow`, {
       method: "DELETE",
       credentials: "include",
-      headers : {
-        "authkey" : token
-      }
-    })
+      headers: {
+        authkey: token,
+      },
+    });
     const data = await response.json();
-    return data
+    return data;
   } catch (err) {
     return err;
   }
-}
+};
 
-export const giveLike = async(blogId:string,token:string) =>{
+export const giveLike = async (blogId: string, token: string) => {
   try {
     const response = await fetch(url + `blog\/${blogId}/like`, {
       method: "POST",
       credentials: "include",
-      headers : {
-        "authkey" : token
-      }
-    })
+      headers: {
+        authkey: token,
+      },
+    });
     const data = await response.json();
-    return data
+    return data;
   } catch (err) {
     return err;
   }
-}
+};
 
-export const removeLike = async(blogId:string,token:string) =>{
+export const removeLike = async (blogId: string, token: string) => {
   try {
     const response = await fetch(url + `blog\/${blogId}/like`, {
       method: "DELETE",
       credentials: "include",
-      headers : {
-        "authkey" : token
-      }
-    })
+      headers: {
+        authkey: token,
+      },
+    });
     const data = await response.json();
-    return data
+    return data;
   } catch (err) {
     return err;
   }
-}
+};

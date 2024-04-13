@@ -6,10 +6,11 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 type PropsValue = {
   isFollowed?: boolean;
   owner?: string;
-  setData: Dispatch<SetStateAction<any>>;
+  setData?: Dispatch<SetStateAction<any>>;
+  onClickFollow : () => void
 };
 
-function CustomFollowButton({ isFollowed, owner, setData }: PropsValue) {
+function CustomFollowButton({ isFollowed, setData,onClickFollow }: PropsValue) {
   const { token } = UseUserContext();
   return (
     <button
@@ -18,49 +19,50 @@ function CustomFollowButton({ isFollowed, owner, setData }: PropsValue) {
           ? "bg-gray-500 hover:bg-gray-600"
           : "bg-green-400 hover:bg-green-500"
       }  text-white text-xl rounded-md px-4 py-2 my-2 sm:text-2xl`}
-      onClick={() => {
-        if (!isFollowed) {
-          if (owner && token) {
-            followUser(owner, token)
-              .then((e) => {
-                console.log(e);
-                if (e.success) {
-                  setData((prev: any) => ({
-                    ...prev,
-                    owner: {
-                      ...prev.owner,
-                      followersCount: prev.owner.followersCount + 1,
-                      isFollowed: true,
-                    },
-                  }));
-                }
-              })
-              .catch((err: any) => {
-                console.log("The error is ", err);
-              });
-          }
-        } else {
-          if (owner && token) {
-            unfollowUser(owner, token)
-              .then((e) => {
-                console.log(e);
-                if (e.success) {
-                  setData((prev: any) => ({
-                    ...prev,
-                    owner: {
-                      ...prev.owner,
-                      followersCount: prev.owner.followersCount - 1,
-                      isFollowed: false,
-                    },
-                  }));
-                }
-              })
-              .catch((err) => {
-                console.log("The error is ", err);
-              });
-          }
-        }
-      }}
+      // onClick={() => {
+      //   if (!isFollowed) {
+      //     if (owner && token) {
+      //       followUser(owner, token)
+      //         .then((e) => {
+      //           console.log(e);
+      //           if (e.success) {
+      //             setData((prev: any) => ({
+      //               ...prev,
+      //               owner: {
+      //                 ...prev.owner,
+      //                 followersCount: prev.owner.followersCount + 1,
+      //                 isFollowed: true,
+      //               },
+      //             }));
+      //           }
+      //         })
+      //         .catch((err: any) => {
+      //           console.log("The error is ", err);
+      //         });
+      //     }
+      //   } else {
+      //     if (owner && token) {
+      //       unfollowUser(owner, token)
+      //         .then((e) => {
+      //           console.log(e);
+      //           if (e.success) {
+      //             setData((prev: any) => ({
+      //               ...prev,
+      //               owner: {
+      //                 ...prev.owner,
+      //                 followersCount: prev.owner.followersCount - 1,
+      //                 isFollowed: false,
+      //               },
+      //             }));
+      //           }
+      //         })
+      //         .catch((err) => {
+      //           console.log("The error is ", err);
+      //         });
+      //     }
+      //   }
+      // }}
+      onClick={onClickFollow}
     >
       {isFollowed ? "Followed" : "Follow"}
       {isFollowed ? (

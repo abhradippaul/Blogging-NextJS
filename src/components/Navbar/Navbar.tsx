@@ -9,12 +9,14 @@ import {
   navbarTopMenu,
 } from "@/utils/NavbarComponents";
 import NavbarLink from "./NavbarLink";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 function Navbar() {
   // const [navControl, setNavControl] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const { status, user } = UseUserContext();
-  // console.log(user)
+  console.log(status);
   const hamburgerClick = () => {
     const bgBlackElement = document.querySelector<Element>("#bg-black");
     const sideNavbar = document.querySelector<Element>("#side-navbar");
@@ -82,21 +84,6 @@ function Navbar() {
                 hamburgerClick={hamburgerClick}
               />
             ))}
-            {/* <li>
-                <Link onClick={hamburgerClick} href="/science">
-                  Science
-                </Link>
-              </li>
-              <li>
-                <Link onClick={hamburgerClick} href="/gaming">
-                  Gaming
-                </Link>
-              </li>
-              <li>
-                <Link onClick={hamburgerClick} href="/technology">
-                  Technology
-                </Link>
-              </li> */}
           </ul>
         </div>
       </div>
@@ -114,7 +101,14 @@ function Navbar() {
           />
           <i className="fa-solid fa-magnifying-glass text-xl m2-x cursor-pointer bg-slate-200 py-2 px-4 rounded-md sm:text-2xl"></i>
         </div>
-        <LoggedIn isLoggedIn={status} user={user} />
+        
+        {loading && (
+          <div className="w-32 h-full">
+            <Skeleton className="h-[80%]" />
+          </div>
+        )}
+
+        {!loading && <LoggedIn isLoggedIn={status} user={user} />}
       </div>
     </nav>
   );

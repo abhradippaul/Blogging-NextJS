@@ -12,8 +12,8 @@ import {
 } from "react";
 
 interface ContextValue {
-  status: boolean;
-  setStatus: React.Dispatch<React.SetStateAction<boolean>>;
+  status: boolean | undefined;
+  setStatus: React.Dispatch<React.SetStateAction<boolean | undefined>>;
   user: any;
   setUser: React.Dispatch<React.SetStateAction<any>>;
   token: string;
@@ -21,7 +21,7 @@ interface ContextValue {
 }
 
 export const UserContext = createContext<ContextValue>({
-  status: false,
+  status: undefined,
   setStatus: () => {},
   user: {},
   setUser: () => {},
@@ -39,7 +39,7 @@ type ChildrenValue = {
 
 function UserContextProvider({ children }: ChildrenValue) {
   const [user, setUser] = useState({});
-  const [status, setStatus] = useState<boolean>(false);
+  const [status, setStatus] = useState<boolean |undefined>();
   const [token, setToken] = useState<string>("");
   return (
     <UserContext.Provider

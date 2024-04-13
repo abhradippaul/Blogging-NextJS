@@ -4,7 +4,7 @@ import SubmitButton from "../FormElement/SubmitButton";
 
 
 type PropsValue = {
-  isLoggedIn: boolean;
+  isLoggedIn: boolean | undefined;
   user : any;
 };
 

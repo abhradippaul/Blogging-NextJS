@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 import { CheckTimeAgo } from "@/utils/CheckTime";
 import Link from "next/link";
 

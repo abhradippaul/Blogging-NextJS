@@ -135,7 +135,6 @@ function page() {
   };
 
   return (
-    loading && (
         <div className="bg-slate-200 min-h-[93dvh]">
           <div className="max-w-7xl mx-auto px-2 py-8">
             <div className="bg-white shadow-lg rounded-lg p-6 mb-8">
@@ -283,7 +282,6 @@ function page() {
             </div>
           </div>
         </div>
-    )
   );
 }
 
