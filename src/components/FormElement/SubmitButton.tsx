@@ -1,3 +1,4 @@
+import { Loader2 } from "lucide-react";
 import { SetStateAction } from "react";
 type PropsValue = {
   children: string;
@@ -24,7 +25,7 @@ function SubmitButton({
       }}
       className={className}
     >
-      {children}
+      {children ? children : <div className="flex items-center justify-center"><Loader2 className="animate-spin h-8 w-8" /></div>}
     </button>
   );
 }

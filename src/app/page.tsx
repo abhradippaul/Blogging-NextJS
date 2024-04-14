@@ -46,14 +46,23 @@ export default function Home() {
     <main className="bg-slate-200 min-h-screen">
       {/* {data.length}
       {loading ? <h1>Loading... </h1> : <h1>This is my static line</h1>} */}
-      <div className="max-w-7xl mx-auto px-2 py-4 flex flex-wrap gap-3 justify-around">
+      <div className="max-w-7xl mx-auto px-2 py-4 flex flex-wrap gap-4 justify-around">
         {data.map((e) => (
           <Card value={e} key={e.slug} />
         ))}
         {/* )} */}
         {/* <Card value={{test : "test"}} /> */}
+      {loading && (
+        <div className="w-full flex flex-wrap gap-4">
+          <HomePageCard />
+          <HomePageCard />
+          <HomePageCard />
+          <HomePageCard />
+          <HomePageCard />
+          <HomePageCard />
+        </div>
+      )}
       </div>
-      <HomePageCard />
     </main>
   );
 }

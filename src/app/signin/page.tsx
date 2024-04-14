@@ -16,18 +16,18 @@ import { useRouter } from "next/navigation";
 import { useId, useState } from "react";
 
 function page() {
-  const [data, setData] = useState({
+  const [userInfo, setUserInfo] = useState({
     email: "",
     password: "",
   });
   const { setUser, setStatus } = UseUserContext();
-  const [loading, setLoading] = useState<boolean>();
+  const [isLoading, setIsLoading] = useState<boolean>();
   const [error, setError] = useState<string>("");
   const router = useRouter();
   const handleOnSubmit = (e: any) => {
     e.preventDefault();
-    setLoading(true);
-    signInUser(data)
+    setIsLoading(true);
+    signInUser(userInfo)
       .then((e) => {
         if (e.success) {
           const token = {
@@ -52,7 +52,7 @@ function page() {
         console.log("The error is ", err);
       })
       .finally(() => {
-        setLoading((prev) => !prev);
+        setIsLoading(false);
       });
   };
 
@@ -73,12 +73,12 @@ function page() {
             inputClass={inputClass}
             outsideDivClass={inputOuterClass}
             labelClass={inputLabelClass}
-            data={data}
-            setData={setData}
+            data={userInfo}
+            setData={setUserInfo}
           />
         ))}
         <SubmitButton
-          children={loading ? "Loading...." : "Submit"}
+          children={isLoading ? "" : "Submit"}
           className={submitButtonClass}
         />
         {error && <h1 className="text-center text-red-600 text-xl">{error}</h1>}

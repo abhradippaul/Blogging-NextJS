@@ -149,7 +149,7 @@ function page() {
               />
             ) : (
               <CustomFollowButton
-                onClickFollow={followFunctionality}
+                functionality={followFunctionality}
                 isFollowed={data.isFollowed}
               />
             )}
