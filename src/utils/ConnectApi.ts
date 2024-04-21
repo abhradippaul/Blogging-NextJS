@@ -82,6 +82,28 @@ export const getUser = async (userName: string, token: string) => {
   }
 };
 
+export const updateUser = async (
+  userName: string,
+  token: string,
+  userInfo: string
+) => {
+  try {
+    const response = await fetch(url + `user\/${userName}`, {
+      method: "PATCH",
+      credentials: "include",
+      headers: {
+        authkey: token,
+        "Content-Type": "application/json",
+      },
+      body: userInfo,
+    });
+    const data = await response.json();
+    return data;
+  } catch (err) {
+    return err;
+  }
+};
+
 export const getBlog = async (blogId: string, token: string) => {
   try {
     const response = await fetch(url + `blog\/${blogId}`, {
@@ -99,13 +121,13 @@ export const getBlog = async (blogId: string, token: string) => {
 };
 
 export const updateBlog = async (
-  blogId: string,
+  slug: string,
   token: string,
   newData: string
 ) => {
   try {
-    const response = await fetch(url + `blog\/${blogId}`, {
-      method: "PUT",
+    const response = await fetch(url + `blog\/${slug}`, {
+      method: "PATCH",
       credentials: "include",
       headers: {
         authkey: token,
@@ -165,10 +187,11 @@ export const updateBlogComment = async (
 ) => {
   try {
     const response = await fetch(url + `blog\/${commentId}/comment`, {
-      method: "PUT",
+      method: "PATCH",
       credentials: "include",
       headers: {
         authkey: token,
+        "Content-Type": "application/json",
       },
       body: commentData,
     });

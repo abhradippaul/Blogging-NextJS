@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useId, useState } from "react";
+import React, { useCallback, useEffect, useId, useRef, useState } from "react";
 import CustomTextarea from "./FormElement/CustomTextarea";
 import EditOrDelete from "./FormElement/EditOrDelete";
 import { UseUserContext } from "@/Context/UserContext";
@@ -8,19 +8,15 @@ import CustomConfirm from "./FormElement/CustomConfirm";
 
 function Comment({ commentData }: any) {
   const [data, setData] = useState({
-    userName: "",
-    comment: "",
+    userName: commentData.userName,
+    comment: commentData.comment,
   });
   const { user, token } = UseUserContext();
   const [editComment, setEditComment] = useState<boolean>(false);
   const id = useId();
-  useEffect(() => {
-    setData({
-      userName: commentData.userName,
-      comment: commentData.comment,
-    });
-  }, [commentData]);
-  const deleteComment = () => {
+  const textareaRef = useRef(null);
+
+  const deleteComment = useCallback(() => {
     deleteBlogComment(commentData._id, token)
       .then((e) => {
         console.log(e);
@@ -32,25 +28,32 @@ function Comment({ commentData }: any) {
       .catch((err) => {
         console.log("The error is ", err);
       });
-  };
-  const updateComment = () => {
-    console.log(commentData._id, token, JSON.stringify(data.comment));
-    if ((commentData._id, token, data.comment)) {
-      // updateBlogComment(
-      //   commentData._id,
-      //   token,
-      //   JSON.stringify({ comment: data.comment })
-      // )
-      //   .then((e) => {
-      //     console.log(e);
-      //     setEditComment(false);
-      //   })
-      //   .catch((err) => {
-      //     console.log("The error is ", err);
-      //   });
+  }, [commentData, token]);
+
+  const updateComment = useCallback(() => {
+    if (commentData.comment !== data.comment) {
+      if ((commentData._id, token, data.comment)) {
+        updateBlogComment(
+          commentData._id,
+          token,
+          JSON.stringify({ comment: data.comment })
+        )
+          .then((e) => {
+            console.log(e);
+            if (e.success) {
+              setEditComment(false);
+            }
+          })
+          .catch((err) => {
+            console.log("The error is ", err);
+          });
+      }
     }
-  };
-  if (data.comment && data.userName) {
+  }, [commentData, data, token]);
+
+  // console.log(user.userName,commentData);
+
+  if (commentData.comment && commentData.userName && user.userName) {
     return (
       <div className="flex">
         <img
@@ -60,7 +63,7 @@ function Comment({ commentData }: any) {
         />
         <div className="w-full flex justify-center flex-col">
           <div className="flex items-center">
-            <h1 className="mx-2">@{data.userName}</h1>
+            <h1 className="mx-2">@{commentData.userName}</h1>
             <h6 className="mx-2">2 years ago</h6>
           </div>
           <CustomTextarea
@@ -72,16 +75,42 @@ function Comment({ commentData }: any) {
               editComment && "border rounded-md px-2 m-2"
             }`}
             id={id}
+            propRef={textareaRef}
           />
         </div>
-        {data.userName === user.userName && editComment ? (
-          <CustomConfirm setEdit={setEditComment} onSave={updateComment} />
+        {commentData.userName === user.userName &&
+          (editComment ? (
+            <div className="flex items-center justify-center">
+              <CustomConfirm setEdit={setEditComment} onSave={updateComment} />
+            </div>
+          ) : (
+            <EditOrDelete
+              // setEdit={setEditComment}
+              functionality2={deleteComment}
+              functionality1={() => {
+                if (textareaRef.current) {
+                  textareaRef.current?.focus();
+                }
+                setEditComment(true);
+              }}
+            />
+          ))}
+        {/* {(data.userName === user.userName) && editComment ? (
+          <div className="flex items-center justify-center">
+            <CustomConfirm setEdit={setEditComment} onSave={updateComment} />
+          </div>
         ) : (
           <EditOrDelete
-            setEdit={setEditComment}
-            functionality={deleteComment}
+            // setEdit={setEditComment}
+            functionality2={deleteComment}
+            functionality1={() => {
+              if (textareaRef.current) {
+                textareaRef.current?.focus();
+              }
+              setEditComment(true);
+            }}
           />
-        )}
+        )} */}
       </div>
     );
   }

@@ -7,6 +7,7 @@ type PropsValue = {
   liClassName: string;
   hamburgerClick: () => void;
   link: string;
+  imageSrc?:string
 };
 
 function NavbarLink({
@@ -14,6 +15,7 @@ function NavbarLink({
   liClassName,
   link,
   hamburgerClick,
+  imageSrc
 }: PropsValue) {
   const router = useRouter();
   return (
@@ -24,7 +26,8 @@ function NavbarLink({
         hamburgerClick();
       }}
     >
-      <Link href={link}>
+      <Link href={link} className="flex w-[70%] items-center justify-between">
+        {imageSrc && <img src={`${imageSrc}`} className="w-8 h-8" />}
         {children}
       </Link>
     </li>

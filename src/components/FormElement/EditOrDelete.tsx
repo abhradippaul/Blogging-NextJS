@@ -4,15 +4,21 @@ import { updateBlog } from "@/utils/ConnectApi";
 
 type PropsValue = {
   // setEdit: React.Dispatch<SetStateAction<boolean>>;
-  functionality2: React.Dispatch<SetStateAction<boolean>> | Function
-  functionality1: React.Dispatch<SetStateAction<boolean>> | Function
+  functionality2: () => void;
+  functionality1: () => void;
   className?: string;
   outerClassName?: string;
-  children1? : string
-  children2? : string
+  children1?: string;
+  children2?: string;
 };
 
-function EditOrDelete({ className, children1,children2,functionality1,functionality2 }: PropsValue) {
+function EditOrDelete({
+  className,
+  children1,
+  children2,
+  functionality1,
+  functionality2,
+}: PropsValue) {
   return (
     <div className="flex items-center">
       <SubmitButton

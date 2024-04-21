@@ -1,5 +1,5 @@
 "use client"
-import { SetStateAction, useEffect } from "react";
+import { LegacyRef, RefAttributes, SetStateAction, useEffect, useRef } from "react";
 
 interface Data {
   [key: string]: any;
@@ -12,6 +12,7 @@ type PropsValue = {
   name: string;
   setData: React.Dispatch<SetStateAction<any>>;
   id? : string;
+  propRef? : LegacyRef<HTMLTextAreaElement> | null
 };
 
 function CustomTextarea({
@@ -20,9 +21,11 @@ function CustomTextarea({
   textareaClass,
   name,
   setData,
-  id
+  id,
+  propRef
 }: PropsValue) {
   // console.log(data)
+  const ref = propRef ? propRef : useRef()
   useEffect(() => {
     // console.log(id)
     const targetarea = document.getElementById(`${id}`)
@@ -44,6 +47,7 @@ function CustomTextarea({
           }));
         }}
         readOnly={!edit}
+        ref={propRef}
         className={textareaClass}
         value={data[name]}
       />

@@ -2,22 +2,31 @@
 import Link from "next/link";
 import LoggedIn from "./LoggedIn";
 import { UseUserContext } from "@/Context/UserContext";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import {
   followingUsers,
   navbarCategory,
   navbarTopMenu,
 } from "@/utils/NavbarComponents";
 import NavbarLink from "./NavbarLink";
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 function Navbar() {
-  // const [navControl, setNavControl] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const { status, user } = UseUserContext();
-  console.log(status);
-  const hamburgerClick = () => {
+  const inputRef = useRef(null);
+  const [input, setInput] = useState("");
+  const [result, setResult] = useState([
+    {
+      fullName: "",
+      userName: "",
+      title: "",
+      slug: "",
+    },
+  ]);
+
+  const hamburgerClick = useCallback(() => {
     const bgBlackElement = document.querySelector<Element>("#bg-black");
     const sideNavbar = document.querySelector<Element>("#side-navbar");
     const body = document.querySelector<Element>("body");
@@ -26,7 +35,23 @@ function Navbar() {
       bgBlackElement.classList.toggle("hidden");
       sideNavbar.classList.toggle("sideNavbar");
     }
-  };
+  }, []);
+
+  const onSearch = useCallback(async (e: string) => {
+    try {
+      if (e.length > 1) {
+        const response = await fetch(`http://localhost/api/v1/search/${e}`);
+        const data = await response.json();
+        console.log(data);
+        if (data.status) {
+          setResult(data.result);
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
+
   useEffect(() => {
     setLoading(false);
   }, []);
@@ -58,20 +83,23 @@ function Navbar() {
             />
           ))}
         </ul>
-        <div className="border text-xl p-4">
-          <h1 className="my-2">Following</h1>
-          <ul>
-            {followingUsers.map((menu) => (
-              <NavbarLink
-                children={menu.label}
-                link={menu.path}
-                key={menu.label}
-                liClassName="my-1 px-1 py-2 hover:bg-slate-200 cursor-pointer rounded-md"
-                hamburgerClick={hamburgerClick}
-              />
-            ))}
-          </ul>
-        </div>
+        {followingUsers.length && (
+          <div className="border text-xl p-4">
+            <h1 className="my-2">Following</h1>
+            <ul>
+              {followingUsers.map((menu) => (
+                <NavbarLink
+                  children={menu.label}
+                  link={menu.path}
+                  key={menu.label}
+                  imageSrc="user.png"
+                  liClassName="my-1 px-1 py-2 hover:bg-slate-200 cursor-pointer rounded-md"
+                  hamburgerClick={hamburgerClick}
+                />
+              ))}
+            </ul>
+          </div>
+        )}
         <div className="border text-xl p-4">
           <h1 className="my-2 font-semibold">Explore</h1>
           <ul>
@@ -94,14 +122,81 @@ function Navbar() {
             <Link href="/">E Blog</Link>
           </h1>
         </div>
-        <div className="flex items-center justify-between bg-white rounded-md overflow-hidden sm:w-1/2">
-          <input
-            type="text"
-            className="w-[80%] hidden text-base mx-2 border-none outline-none rounded-md px-2 py-1 sm:text:lg sm:block"
-          />
-          <i className="fa-solid fa-magnifying-glass text-xl m2-x cursor-pointer bg-slate-200 py-2 px-4 rounded-md sm:text-2xl"></i>
+        <i
+          className="fa-solid fa-magnifying-glass text-xl m2-x cursor-pointer bg-slate-200 py-2 px-4 rounded-md sm:text-2xl"
+          onClick={() => {
+            const search_page = document.querySelector("#search-page");
+            if (search_page) {
+              search_page.classList.remove("invisible");
+              search_page.classList.add("visible");
+              inputRef.current?.focus();
+            }
+          }}
+        ></i>
+        <div
+          id="search-page"
+          className="fixed invisible top-0 bottom-0 left-0 right-0 bg-slate-600 z-50"
+        >
+          <div className="w-[90%] mx-auto my-4 flex items-center flex-col">
+            <div className="w-full flex justify-between">
+              <i
+                className="fa-solid fa-arrow-left text-xl cursor-pointer bg-slate-200 py-2 px-4 rounded-md sm:text-2xl"
+                onClick={() => {
+                  const search_page = document.querySelector("#search-page");
+                  if (search_page) {
+                    search_page.classList.remove("visible");
+                    search_page.classList.add("invisible");
+                  }
+                }}
+              ></i>
+              <input
+                type="text"
+                ref={inputRef}
+                onChange={(e) => {
+                  onSearch(e.target.value);
+                }}
+                className="w-[70%] hidden text-base border-none outline-none rounded-md px-2 py-1 sm:text:lg sm:block"
+              />
+              <i
+                className="fa-solid fa-magnifying-glass text-xl m2-x cursor-pointer bg-slate-200 py-2 px-4 rounded-md sm:text-2xl"
+                onClick={() => {
+                  const search_page = document.querySelector("#search-page");
+                  if (search_page) {
+                    search_page.classList.remove("visible");
+                    search_page.classList.add("invisible");
+                  }
+                }}
+              ></i>
+            </div>
+            <div className="w-[70%] mt-4 flex flex-col items-center">
+              {result.length &&
+                result.map((data) => {
+                  return (
+                    <Link
+                      key={data.userName || data.slug}
+                      onClick={() => {
+                        const search_page =
+                          document.querySelector("#search-page");
+                        if (search_page) {
+                          search_page.classList.remove("visible");
+                          search_page.classList.add("invisible");
+                        }
+                      }}
+                      href={`/${
+                        data.slug
+                          ? `blog/${data.slug}`
+                          : `user/${data.userName}`
+                      }`}
+                      className="h-12 items-center my-2 justify-center flex w-full bg-white rounded-md"
+                    >
+                      {data.userName ? data.fullName : data.title}
+                    </Link>
+                  );
+                })}
+            </div>
+          </div>
         </div>
-        
+
         {loading && (
           <div className="w-32 h-full">
             <Skeleton className="h-[80%]" />

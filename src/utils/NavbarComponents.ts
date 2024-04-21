@@ -19,19 +19,19 @@ export const navbarTopMenu=  [
 
 export const followingUsers= [
     {
-        label: "user1",
+        label: "User user 1",
         path: "/user/user1",
     },
     {
-        label: "user2",
+        label: "User user 2",
         path: "/user/user2",
     },
     {
-        label: "user3",
+        label: "User user 3",
         path: "/user/user3",
     },
     {
-        label: "user4",
+        label: "User user 4",
         path: "/user/user4",
     }
 ]

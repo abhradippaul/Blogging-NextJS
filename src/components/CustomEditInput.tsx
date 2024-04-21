@@ -1,10 +1,11 @@
+import { SetStateAction } from "react";
 
 type PropsValue = {
-    value : string
-    edit : boolean
-}
+  value: string;
+  edit: boolean;
+};
 
-function CustomEditInput({value,edit}:PropsValue) {
+function CustomEditInput({ value, edit }: PropsValue) {
   return (
     <input
       id="title-input"

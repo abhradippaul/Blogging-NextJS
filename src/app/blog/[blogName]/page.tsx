@@ -36,11 +36,16 @@ function page() {
     createdAt: "",
   });
   const [addNewComment, setAddNewComment] = useState<string>("");
-  const [blogContent, setBlogContent] = useState({});
+  const [blogContent, setBlogContent] = useState({
+    title: "",
+    content: "",
+  });
   const { setStatus, setUser, setToken, token, user } = UseUserContext();
   const { blogName } = useParams();
   const commentButton = useRef<HTMLDivElement>(null);
   const commentInput = useRef<HTMLInputElement>(null);
+  const titleInputRef = useRef<HTMLInputElement>(null);
+  const contentInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -99,7 +104,11 @@ function page() {
             ...prev,
             commentsCount: prev.commentsCount + 1,
           }));
-          setAddNewComment("");
+          if (commentInput.current && commentButton.current) {
+            commentInput.current.classList.remove("border-black");
+            commentButton.current.classList.add("invisible");
+            setAddNewComment("");
+          }
         })
         .catch((err) => {
           console.log("The error is ", err);
@@ -108,21 +117,29 @@ function page() {
   }, [token, data, addNewComment]);
 
   const updateThisBlog = useCallback(() => {
-    // console.log(text)
-    const blogId = data._id;
-    if (blogId && token && blogContent) {
-      // console.log("Test")
-      updateBlog(blogId, token, JSON.stringify(blogContent))
-        .then((e) => {
-          if (e.success) {
-            window.location.reload();
-          }
-        })
-        .catch((err) => {
-          console.log("The error is ", err);
-        });
+    const slug = data.slug;
+    if (
+      blogContent.title != data.title ||
+      blogContent.content != data.content
+    ) {
+      if (slug && token && blogContent.title && blogContent.content) {
+        updateBlog(slug, token, JSON.stringify(blogContent))
+          .then((e) => {
+            if (e.success) {
+              // window.location.reload();
+              setEdit(false);
+              setData((prev: any) => ({
+                ...prev,
+                ...blogContent,
+              }));
+            }
+          })
+          .catch((err) => {
+            console.log("The error is ", err);
+          });
+      }
     }
-  }, [data.blogContent]);
+  }, [data, blogContent, token]);
 
   const deleteThisBlog = () => {
     const blogId = data._id;
@@ -215,8 +232,10 @@ function page() {
                 ) : (
                   <EditOrDelete
                     className="text-xl sm:text-2xl"
-                    functionality={deleteThisBlog}
-                    setEdit={setEdit}
+                    functionality2={deleteThisBlog}
+                    functionality1={() => {
+                      setEdit((prev) => !prev);
+                    }}
                   />
                 )}
               </div>
@@ -234,8 +253,8 @@ function page() {
                   name="title"
                   readonly={!edit}
                   data={blogContent}
-                  // ref={inputRef}
-                  inputClass={`w-full py-2 text-xl font-bold my-4 ${
+                  // ref={titleInputRef}
+                  inputClass={`w-full p-1 text-xl font-bold my-4 ${
                     !edit && "border-none"
                   } border-2 rounded-md outline-none sm:text-3xl`}
                   setData={setBlogContent}
@@ -245,7 +264,7 @@ function page() {
                   name="content"
                   data={blogContent}
                   setData={setBlogContent}
-                  textareaClass={`mb-4 w-full py-2 resize-none outline-none border-2 rounded-md ${
+                  textareaClass={`mb-4 w-full p-1 resize-none outline-none border-2 rounded-md ${
                     !edit && "border-none"
                   }`}
                 />

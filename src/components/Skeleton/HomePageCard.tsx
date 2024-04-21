@@ -3,7 +3,7 @@ import Skeleton from "react-loading-skeleton";
 
 function HomePageCard() {
   return (
-    <div className="h-[400px] w-[250px] rounded-md bg-white flex items-center justify-around flex-col px-4 py-2 sm:h-[500px] sm:w-[300px]">
+    <div className="h-[500px] min-w-[300px] max-w-[350px] rounded-md bg-white flex flex-grow items-center justify-around flex-col px-4 py-2">
       <div className="w-full flex items-center justify-between pb-2">
         <div className="flex items-center justify-center">
           <div className="w-6 h-6 mr-2 sm:w-8 sm:h-8">

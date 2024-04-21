@@ -53,7 +53,7 @@ export default function Home() {
         {/* )} */}
         {/* <Card value={{test : "test"}} /> */}
       {loading && (
-        <div className="w-full flex flex-wrap gap-4">
+        <div className="w-full flex items-center justify-around flex-wrap gap-4">
           <HomePageCard />
           <HomePageCard />
           <HomePageCard />
