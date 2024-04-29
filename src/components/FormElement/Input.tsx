@@ -49,13 +49,15 @@ const Input = React.forwardRef(
           ref={innerRef}
           value={data[name]}
           onChange={(e) => {
-            if (name === "title" && readonly) {
-              // console.log(e.target.value)
+            if (name === "title") {
               setData((prev: any) => ({
                 ...prev,
                 [name]: e.target.value,
                 slug: e.target.value.replaceAll(" ", "-"),
               }));
+            }
+            if(name === "blogtitle") {
+              setData((prev: any) => ({ ...prev, [name]: e.target.value }));
             }
             setData((prev: any) => ({ ...prev, [name]: e.target.value }));
           }}

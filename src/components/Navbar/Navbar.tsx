@@ -2,21 +2,26 @@
 import Link from "next/link";
 import LoggedIn from "./LoggedIn";
 import { UseUserContext } from "@/Context/UserContext";
-import { useCallback, useEffect, useId, useRef, useState } from "react";
-import {
-  followingUsers,
-  navbarCategory,
-  navbarTopMenu,
-} from "@/utils/NavbarComponents";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { navbarCategory, navbarTopMenu } from "@/utils/NavbarComponents";
 import NavbarLink from "./NavbarLink";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { getUserFollowings } from "@/utils/ConnectApi";
+
+interface FollowingValue {
+  fullName: string;
+  userName: string;
+  featuredImage: {
+    public_id: string;
+  };
+}
 
 function Navbar() {
   const [loading, setLoading] = useState<boolean>(true);
-  const { status, user } = UseUserContext();
+  const [followings, setFollowings] = useState<FollowingValue[]>([]);
+  const { status, user, token } = UseUserContext();
   const inputRef = useRef(null);
-  const [input, setInput] = useState("");
   const [result, setResult] = useState([
     {
       fullName: "",
@@ -26,7 +31,13 @@ function Navbar() {
     },
   ]);
 
-  const hamburgerClick = useCallback(() => {
+  const hamburgerClick = useCallback(async () => {
+    if (token) {
+      const data = await getUserFollowings(token);
+      if (data.success) {
+        setFollowings(data.data.follows);
+      }
+    }
     const bgBlackElement = document.querySelector<Element>("#bg-black");
     const sideNavbar = document.querySelector<Element>("#side-navbar");
     const body = document.querySelector<Element>("body");
@@ -35,17 +46,25 @@ function Navbar() {
       bgBlackElement.classList.toggle("hidden");
       sideNavbar.classList.toggle("sideNavbar");
     }
-  }, []);
+  }, [token]);
 
   const onSearch = useCallback(async (e: string) => {
     try {
       if (e.length > 1) {
         const response = await fetch(`http://localhost/api/v1/search/${e}`);
         const data = await response.json();
-        console.log(data);
         if (data.status) {
           setResult(data.result);
         }
+      } else {
+        setResult([
+          {
+            fullName: "",
+            userName: "",
+            title: "",
+            slug: "",
+          },
+        ]);
       }
     } catch (err) {
       console.log(err);
@@ -69,7 +88,7 @@ function Navbar() {
       ></div>
       <div
         id="side-navbar"
-        className="fixed top-0 bottom-0 left-0 right-[50%] bg-slate-100 translate-x-[-100%] transformSideNavbar z-10 sm:right-[70%] overflow-y-scroll"
+        className="fixed top-0 bottom-0 left-0 right-[40%] bg-slate-100 translate-x-[-100%] transformSideNavbar z-10 md:right-[60%] xl:right-[80%] overflow-y-scroll"
       >
         <div className="h-16"></div>
         <ul className="border text-xl p-4">
@@ -83,23 +102,25 @@ function Navbar() {
             />
           ))}
         </ul>
-        {followingUsers.length && (
-          <div className="border text-xl p-4">
-            <h1 className="my-2">Following</h1>
+        <div className="border text-xl p-4">
+          <h1 className="my-2">Following</h1>
+          {followings?.length ? (
             <ul>
-              {followingUsers.map((menu) => (
+              {followings?.map((menu) => (
                 <NavbarLink
-                  children={menu.label}
-                  link={menu.path}
-                  key={menu.label}
-                  imageSrc="user.png"
+                  children={menu.fullName}
+                  link={"/user/" + menu.userName}
+                  key={menu.userName}
+                  imageSrc={menu.featuredImage.public_id}
                   liClassName="my-1 px-1 py-2 hover:bg-slate-200 cursor-pointer rounded-md"
                   hamburgerClick={hamburgerClick}
                 />
               ))}
             </ul>
-          </div>
-        )}
+          ) : (
+            <div></div>
+          )}
+        </div>
         <div className="border text-xl p-4">
           <h1 className="my-2 font-semibold">Explore</h1>
           <ul>
@@ -170,6 +191,7 @@ function Navbar() {
             </div>
             <div className="w-[70%] mt-4 flex flex-col items-center">
               {result.length &&
+                (result[0].userName || result[0].slug) &&
                 result.map((data) => {
                   return (
                     <Link

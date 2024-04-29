@@ -39,8 +39,14 @@ type ChildrenValue = {
 
 function UserContextProvider({ children }: ChildrenValue) {
   const [user, setUser] = useState({});
-  const [status, setStatus] = useState<boolean |undefined>();
+  const [status, setStatus] = useState<boolean | undefined>();
   const [token, setToken] = useState<string>("");
+  useEffect(() => {
+    let localToken = localStorage.getItem("token");
+    if (localToken) {
+      setToken(localToken);
+    }
+  }, []);
   return (
     <UserContext.Provider
       value={{ user, setUser, status, setStatus, token, setToken }}

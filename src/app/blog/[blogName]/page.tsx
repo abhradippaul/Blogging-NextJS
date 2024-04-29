@@ -20,10 +20,14 @@ import {
 import { useParams, useRouter } from "next/navigation";
 import { getLocalSetContext } from "@/utils/GetFromLocalStorage";
 import CustomIcon from "@/components/IconElement/CustomIcon";
-import Skeleton from "react-loading-skeleton";
 import LoadingBlogPage from "@/components/Skeleton/LoadingBlogPage";
+import Image from "next/image";
 const imageIconClass =
   "border py-2 text-xl rounded-md w-1/3 flex items-center justify-center sm:text-2xl hover:bg-slate-50";
+
+// const image = process.env.NEXT_PUBLIC_DEV_IMAGE_URL;
+const image = null;
+const imageUrl = process.env.NEXT_PUBLIC_IMAGE_URL;
 
 function page() {
   const [owner, setOwner] = useState<boolean>();
@@ -34,10 +38,11 @@ function page() {
     comment: "",
     userName: "",
     createdAt: "",
+    featuredImage: "",
   });
   const [addNewComment, setAddNewComment] = useState<string>("");
   const [blogContent, setBlogContent] = useState({
-    title: "",
+    blogtitle: "",
     content: "",
   });
   const { setStatus, setUser, setToken, token, user } = UseUserContext();
@@ -57,11 +62,10 @@ function page() {
       getBlog(blogName.toString(), getItem.token)
         .then((e) => {
           if (e.success) {
-            console.log(e);
             setData(e.data);
             setOwner(e.data.owner.userName === getItem.userData.userName);
             setBlogContent({
-              title: e.data.title,
+              blogtitle: e.data.title,
               content: e.data.content,
             });
           } else if (e.message === "Invalid access token") {
@@ -98,6 +102,7 @@ function page() {
           setNewComment({
             comment: e.data.comment,
             userName: user.userName,
+            featuredImage: user.featuredImage.public_id,
             createdAt: e.data.createdAt,
           });
           setData((prev: any) => ({
@@ -119,10 +124,10 @@ function page() {
   const updateThisBlog = useCallback(() => {
     const slug = data.slug;
     if (
-      blogContent.title != data.title ||
+      blogContent.blogtitle != data.title ||
       blogContent.content != data.content
     ) {
-      if (slug && token && blogContent.title && blogContent.content) {
+      if (slug && token && blogContent.blogtitle && blogContent.content) {
         updateBlog(slug, token, JSON.stringify(blogContent))
           .then((e) => {
             if (e.success) {
@@ -146,6 +151,7 @@ function page() {
     if (blogId && token) {
       deleteBlog(blogId, token)
         .then((e) => {
+          console.log(e);
           if (e.success) {
             router.push("/");
           }
@@ -208,11 +214,18 @@ function page() {
             <div className="max-w-5xl m-auto">
               <div className="flex items-center mb-4 justify-between">
                 <div className="flex items-center justify-center">
-                  <img
-                    className="w-10 h-10 rounded-full mr-4 sm:w-20 sm:h-20"
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrBp4rAadRiXmk6NWl3redkvGJgWGDkBT4vA&s"
-                    alt="Owner Image"
-                  />
+                  <div className="w-10 h-10 rounded-full overflow-hidden relative mr-4 sm:w-20 sm:h-20">
+                    <Image
+                      className="object-cover"
+                      fill={true}
+                      sizes="full"
+                      src={
+                        image ||
+                        imageUrl + "" + data.owner?.featuredImage?.public_id
+                      }
+                      alt="Owner Image"
+                    />
+                  </div>
                   <div>
                     <Link
                       href={`/user/${data.owner?.userName}`}
@@ -242,15 +255,20 @@ function page() {
               {/* <h1>{Date.now()}</h1> */}
               <div className="relative group">
                 <div className="w-full relative group">
-                  <img
-                    className="w-full mb-4"
-                    src="https://images.unsplash.com/photo-1709842665072-6404e47a5386?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                    alt="Blog Image"
-                  />
+                  <div className="w-full h-[600px] relative mb-4">
+                    <Image
+                      className="object-cover"
+                      fill={true}
+                      src={
+                        image || imageUrl + "" + data.featuredImage?.public_id
+                      }
+                      alt="Blog Image"
+                    />
+                  </div>
                   {owner && <CustomFileUpload />}
                 </div>
                 <Input
-                  name="title"
+                  name="blogtitle"
                   readonly={!edit}
                   data={blogContent}
                   // ref={titleInputRef}
@@ -307,12 +325,16 @@ function page() {
               {data.commentsCount} Comments
             </h1>
             <div className="flex items-center justify-between my-4">
-              <img
-                className="w-10 h-10 sm:w-20 sm:h-20"
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrBp4rAadRiXmk6NWl3redkvGJgWGDkBT4vA&s"
-                alt="image"
-              />
-              <div className="w-full text-lg">
+              <div className="w-10 h-10 rounded-full overflow-hidden relative sm:w-20 sm:h-20">
+                <Image
+                  className="object-cover"
+                  fill={true}
+                  sizes="full"
+                  src={image || imageUrl + "" + user.featuredImage.public_id}
+                  alt="Owner Image"
+                />
+              </div>
+              <div className="w-[90%] text-lg">
                 <input
                   type="text"
                   id="comment-input"

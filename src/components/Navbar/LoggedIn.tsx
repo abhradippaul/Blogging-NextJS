@@ -1,39 +1,42 @@
 import Link from "next/link";
 import SubmitButton from "../FormElement/SubmitButton";
-
-
+import Image from "next/image";
 
 type PropsValue = {
   isLoggedIn: boolean | undefined;
-  user : any;
+  user: any;
 };
 
-function LoggedIn({ isLoggedIn,user }: PropsValue) {
-  const className = "border-2 text-xl border-green-500 px-4 py-1  rounded-md hover:bg-green-500 hover:text-white sm:text-2xl"
-  if (isLoggedIn) {
+// const image = process.env.NEXT_PUBLIC_DEV_IMAGE_URL;
+const image = null;
+const imageUrl = process.env.NEXT_PUBLIC_IMAGE_URL;
 
+function LoggedIn({ isLoggedIn, user }: PropsValue) {
+  const className =
+    "border-2 text-xl border-green-500 px-4 py-1  rounded-md hover:bg-green-500 hover:text-white sm:text-2xl";
+  if (isLoggedIn) {
     return (
       <div className="flex items-center justify-between w-32">
         <Link href="/blog/post" about="Add Post">
           <i className="fa-solid fa-circle-plus text-2xl cursor-pointer"></i>
         </Link>
         <Link href={`/user/${user.userName}`}>
-          <img
-            className="w-12 h-12 object-cover rounded-full"
-            src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHVzZXJ8ZW58MHx8MHx8fDA%3D"
-            alt="User image"
-          />
+          <div className="w-12 h-12 overflow-hidden rounded-full relative">
+            <Image
+              className="object-cover"
+              src={image || imageUrl + "" + user.featuredImage.public_id}
+              sizes="full"
+              fill={true}
+              alt="User image"
+            />
+          </div>
         </Link>
-        {/* <SubmitButton children="Logout" className={className}/> */}
       </div>
     );
   } else {
     return (
       <Link href="/signin">
-        <SubmitButton
-          children="Sign In"
-          className={className}
-        />
+        <SubmitButton children="Sign In" className={className} />
       </Link>
     );
   }

@@ -17,8 +17,13 @@ import {
   getItemLocalStorage,
   getItemStringLocalStorage,
 } from "@/utils/LocalStorage";
+import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
+
+// const image = process.env.NEXT_PUBLIC_DEV_IMAGE_URL;
+const image = null;
+const imageUrl = process.env.NEXT_PUBLIC_IMAGE_URL;
 
 function page() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -37,6 +42,7 @@ function page() {
   const [userInfo, setUserInfo] = useState({
     fullName: "",
     description: "",
+    image: "",
   });
   const { setStatus, setUser } = UseUserContext();
   const { userName } = useParams();
@@ -50,15 +56,14 @@ function page() {
       getUser(userName.toString(), token)
         .then((e) => {
           if (e.success) {
-            // console.log(e.data);
             setData(e.data);
             setToken(token);
-            console.log(e.data);
             setUserInfo({
               fullName: e.data.fullName,
               description: e.data.description,
+              image: e.data.featuredImage.public_id,
             });
-            // console.log(e.data.userName,userData.userName)
+            console.log(e.data);
             if (e.data.userName === userData.userName) {
               setOwner(true);
             }
@@ -75,7 +80,24 @@ function page() {
 
   const updateUserInfo = useCallback(
     async (userName: string, token: string) => {
-      if (userInfo.fullName !== data.fullName) {
+      if (
+        userInfo.fullName !== data.fullName &&
+        userInfo.description !== data.description
+      ) {
+        const data = await updateUser(
+          userName,
+          token,
+          JSON.stringify(userInfo)
+        );
+        if (data.success) {
+          setUserInfo((prev) => ({
+            ...prev,
+            fullName: data.fullName,
+            description: data.description,
+          }));
+          setEdit(false);
+        }
+      } else if (userInfo.fullName !== data.fullName) {
         const data = await updateUser(
           userName,
           token,
@@ -88,6 +110,7 @@ function page() {
           }));
           setEdit(false);
         }
+        console.log(data);
       } else if (userInfo.description !== data.description) {
         const data = await updateUser(
           userName,
@@ -97,11 +120,10 @@ function page() {
         if (data.success) {
           setUserInfo((prev) => ({
             ...prev,
-            fullName: data.fullName,
+            description: data.description,
           }));
           setEdit(false);
         }
-        console.log(data);
       }
     },
     [userInfo]
@@ -153,11 +175,15 @@ function page() {
       <div className="bg-slate-200 py-4 min-h-dvh px-2">
         <div className="max-w-7xl rounded-md shadow-lg mx-auto overflow-hidden">
           <div className="relative group">
-            <img
-              className="w-full object-cover h-64"
-              src="https://plus.unsplash.com/premium_photo-1710294627866-6914a34622c8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHx8"
-              alt="Cover Image"
-            />
+            <div className="w-full h-64">
+              <Image
+                className="object-cover"
+                src={image || imageUrl + "" + userInfo.image}
+                fill={true}
+                sizes="full"
+                alt="Cover Image"
+              />
+            </div>
             {owner && (
               <div className="group-hover:flex hidden absolute right-[5%] bg-white rounded-full w-12 h-12 items-center justify-center bottom-[50%] translate-y-[50%]">
                 <i className="fa-solid fa-camera text-4xl cursor-pointer text-black hover:text-gray-800"></i>
@@ -165,12 +191,16 @@ function page() {
             )}
           </div>
           <div className="flex bg-white py-8 flex-col items-center justify-center sm:flex-row">
-            <div className="m-2 relative group w-32 h-32  sm:w-40 sm:h-40">
-              <img
-                className="rounded-full w-full"
-                src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlcnxlbnwwfHwwfHx8MA%3D%3D"
-                alt="Channel Image"
-              />
+            <div className="m-2 relative group w-32 h-32 sm:w-40 sm:h-40">
+              <div className="rounded-full overflow-hidden h-full relative w-full">
+                <Image
+                  className="object-cover"
+                  src={image || imageUrl + "" + userInfo.image}
+                  fill={true}
+                  sizes="full"
+                  alt="Channel Image"
+                />
+              </div>
               {owner && (
                 <div className="group-hover:flex hidden absolute right-0 bottom-[40%] bg-white rounded-full w-8 h-8 items-center justify-center">
                   <i className="fa-solid fa-camera text-2xl cursor-pointer text-black hover:text-gray-800"></i>
@@ -212,10 +242,11 @@ function page() {
                       className="border border-red-500 px-2 py-1 mx-2 rounded-md hover:bg-red-500 hover:text-white"
                       onClick={() => {
                         setEdit((prev) => !prev);
-                        setUserInfo({
+                        setUserInfo((prev) => ({
+                          ...prev,
                           fullName: data.fullName,
                           description: data.description,
-                        });
+                        }));
                       }}
                     >
                       Cancel

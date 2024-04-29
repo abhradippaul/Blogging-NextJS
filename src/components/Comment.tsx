@@ -5,6 +5,11 @@ import EditOrDelete from "./FormElement/EditOrDelete";
 import { UseUserContext } from "@/Context/UserContext";
 import { deleteBlogComment, updateBlogComment } from "@/utils/ConnectApi";
 import CustomConfirm from "./FormElement/CustomConfirm";
+import Image from "next/image";
+
+// const image = process.env.NEXT_PUBLIC_DEV_IMAGE_URL;
+const image = null;
+const imageUrl = process.env.NEXT_PUBLIC_IMAGE_URL;
 
 function Comment({ commentData }: any) {
   const [data, setData] = useState({
@@ -20,10 +25,13 @@ function Comment({ commentData }: any) {
     deleteBlogComment(commentData._id, token)
       .then((e) => {
         console.log(e);
-        setData({
-          comment: "",
-          userName: "",
-        });
+        if (e.success) {
+          window.location.reload();
+        }
+        // setData({
+        //   comment: "",
+        //   userName: "",
+        // });
       })
       .catch((err) => {
         console.log("The error is ", err);
@@ -51,17 +59,19 @@ function Comment({ commentData }: any) {
     }
   }, [commentData, data, token]);
 
-  // console.log(user.userName,commentData);
-
   if (commentData.comment && commentData.userName && user.userName) {
     return (
-      <div className="flex">
-        <img
-          className="w-10 h-10 sm:w-20 sm:h-20"
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrBp4rAadRiXmk6NWl3redkvGJgWGDkBT4vA&s"
-          alt="image"
-        />
-        <div className="w-full flex justify-center flex-col">
+      <div className={`flex my-4 items-center`}>
+        <div className="w-10 h-10 mr-4 rounded-full overflow-hidden relative sm:w-20 sm:h-20">
+          <Image
+            className="object-cover"
+            fill={true}
+            sizes="full"
+            src={image || imageUrl + "" + commentData.featuredImage}
+            alt="image"
+          />
+        </div>
+        <div className="w-[75%] flex justify-center flex-col">
           <div className="flex items-center">
             <h1 className="mx-2">@{commentData.userName}</h1>
             <h6 className="mx-2">2 years ago</h6>

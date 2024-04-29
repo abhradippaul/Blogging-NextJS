@@ -13,7 +13,7 @@ export const navbarTopMenu=  [
     },
     {
         label: "Logout",
-        path: "/logout",
+        path: "/",
     }
 ]
 

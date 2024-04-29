@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer";
 import UserContextProvider from "@/Context/UserContext";
 import { Suspense } from "react";
+import { Toaster } from "react-hot-toast";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -29,11 +30,11 @@ export default function RootLayout({
         />
       </head>
       <body className={inter.className}>
-        <UserContextProvider>
-          <Navbar />
-          {children}
-          {/* <Footer /> */}
-        </UserContextProvider>
+          <UserContextProvider>
+            <Navbar />
+            {children}
+            {/* <Footer /> */}
+          </UserContextProvider>
       </body>
     </html>
   );

@@ -8,15 +8,28 @@ export const blogApi = async (urlEnd: string) => {
   const response = await fetch(url + urlEnd);
   const data = await response.json();
   if (data.success) {
-    // console.log(data)
     return data;
   } else {
     return null;
   }
 };
 
+export const getUserFollowings = async (token: string) => {
+  try {
+    const response = await fetch(url + "user/following/sidebar", {
+      method: "GET",
+      headers: {
+        authkey: token,
+      },
+    });
+    const data = await response.json();
+    return data;
+  } catch (err) {
+    return err;
+  }
+};
+
 export const signUpUser = async (userData: any) => {
-  console.log(userData);
   try {
     const response = await fetch(url + "user/create", {
       method: "POST",

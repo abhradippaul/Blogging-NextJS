@@ -90,7 +90,7 @@ function page() {
             }}
           />
           <SubmitButton
-            children={loading ? "Loading..." : "Submit"}
+            children={loading ? "" : "Submit"}
             className="bg-green-500 text-white py-1 rounded-md my-4 mx-auto hover:bg-green-600 text-lg w-1/2 sm:text-xl"
           />
         </form>

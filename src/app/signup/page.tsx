@@ -11,10 +11,8 @@ import {
   inputLabelClass,
   submitButtonClass,
 } from "@/utils/FormComponent";
-import {
-  useId,
-  useState,
-} from "react";
+import { useRouter } from "next/navigation";
+import { useId, useState } from "react";
 
 function page() {
   const [loading, setLoading] = useState<boolean>();
@@ -23,19 +21,27 @@ function page() {
     email: "",
     password: "",
     userName: "",
+    description: "",
   });
-  const signUpForm = new FormData()
+  const [error, setError] = useState("");
+  const signUpForm = new FormData();
+  const router = useRouter();
   const signUp = (e: any) => {
     setLoading(true);
     e.preventDefault();
-    signUpForm.set('fullName', data.fullName);
-    signUpForm.set('userName', data.userName);
-    signUpForm.set('password', data.password);
-    signUpForm.set('email', data.email);
+    signUpForm.set("fullName", data.fullName);
+    signUpForm.set("userName", data.userName);
+    signUpForm.set("password", data.password);
+    signUpForm.set("description", data.description);
+    signUpForm.set("email", data.email);
     // console.log(data)
     signUpUser(signUpForm)
       .then((data) => {
-        console.log("Response is ", data);
+        if (data.success) {
+          router.push("/");
+        } else {
+          setError(data.message);
+        }
       })
       .catch((err) => {
         console.log("Error is ", new Error(err));
@@ -66,17 +72,26 @@ function page() {
           />
         ))}
         <div className="my-4">
-        <label htmlFor="description" className={inputLabelClass}>Description : </label>
-        <CustomTextarea data={data} name="description" setData={setData}id="description"  textareaClass="resize-none w-full rounded-md min-h-[150px] my-4 border-none outline-none px-2 py-1" edit={true}/>
+          <label htmlFor="description" className={inputLabelClass}>
+            Description :{" "}
+          </label>
+          <CustomTextarea
+            data={data}
+            name="description"
+            setData={setData}
+            id="description"
+            textareaClass="resize-none w-full rounded-md min-h-[150px] my-4 border-none outline-none px-2 py-1"
+            edit={true}
+          />
         </div>
-          
+
         <input
           type="file"
           onChange={(e) => {
             console.log(e.target.files?.[0]);
             let fileData = e.target.files;
             if (fileData && fileData.length) {
-              signUpForm.set('imageData', fileData[0]);
+              signUpForm.set("imageData", fileData[0]);
             }
           }}
           // ref={imageDataRef}
@@ -84,9 +99,14 @@ function page() {
           className="my-2 text-base sm:text-lg"
         />
         <SubmitButton
-          children={loading ? "Loading...." : "Submit"}
-          className={submitButtonClass+" my-2"}
+          children={loading ? "" : "Submit"}
+          className={submitButtonClass + " my-2"}
         />
+        {error && (
+          <h1 className="text-red-600 text-center text-lg my-2 sm:text-xl">
+            {error}
+          </h1>
+        )}
       </form>
     </div>
   );

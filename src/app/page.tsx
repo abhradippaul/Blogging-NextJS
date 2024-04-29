@@ -4,19 +4,8 @@ import Card from "@/components/Card";
 import HomePageCard from "@/components/Skeleton/HomePageCard";
 import { blogApi } from "@/utils/ConnectApi";
 import { getItemLocalStorage } from "@/utils/LocalStorage";
-import { Suspense, useEffect, useState } from "react";
-import Skeleton from "react-loading-skeleton";
+import { useEffect, useState } from "react";
 
-// interface Value {
-//   commentsCount: number;
-//   content : string;
-//   createdAt: string;
-//   featuredImage : object
-//   likesCount: number
-//   owner : object
-//   title : string
-//   _id : string
-// }
 
 export default function Home() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -33,7 +22,6 @@ export default function Home() {
       .then((e) => {
         if (e.success) {
           setData(e.data);
-          console.log(e.data);
         }
       })
       .catch((e) => {
@@ -44,14 +32,10 @@ export default function Home() {
 
   return (
     <main className="bg-slate-200 min-h-screen">
-      {/* {data.length}
-      {loading ? <h1>Loading... </h1> : <h1>This is my static line</h1>} */}
       <div className="max-w-7xl mx-auto px-2 py-4 flex flex-wrap gap-4 justify-around">
         {data.map((e) => (
           <Card value={e} key={e.slug} />
         ))}
-        {/* )} */}
-        {/* <Card value={{test : "test"}} /> */}
       {loading && (
         <div className="w-full flex items-center justify-around flex-wrap gap-4">
           <HomePageCard />
